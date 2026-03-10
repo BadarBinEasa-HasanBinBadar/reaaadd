@@ -482,6 +482,33 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 #ctx-backdrop{position:fixed;inset:0;z-index:4990;display:none}
 #ctx-backdrop.open{display:block}
 
+/* ── REPEAT POPUP ── */
+#repeat-popup-backdrop{position:fixed;inset:0;z-index:5090;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);display:none;opacity:0;transition:opacity .2s}
+#repeat-popup-backdrop.open{display:block;opacity:1}
+#repeat-popup{position:fixed;z-index:5100;width:270px;background:linear-gradient(160deg,#131008,#0c0a03);border:1px solid rgba(212,175,55,.32);border-radius:18px;box-shadow:0 20px 60px rgba(0,0,0,.85),0 4px 20px rgba(212,175,55,.1);padding:0 0 6px;overflow:hidden;display:none;flex-direction:column;opacity:0;transform:scale(.88) translateY(-6px);transition:opacity .22s cubic-bezier(.34,1.4,.64,1),transform .22s cubic-bezier(.34,1.4,.64,1)}
+#repeat-popup.open{display:flex;opacity:1;transform:scale(1) translateY(0)}
+.rp-header{display:flex;align-items:center;gap:8px;padding:13px 14px 10px;border-bottom:1px solid rgba(212,175,55,.14)}
+.rp-title{font-family:'Josefin Sans',sans-serif;font-size:.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold);flex:1}
+.rp-close-btn{width:24px;height:24px;border-radius:50%;background:rgba(212,175,55,.08);border:1px solid rgba(212,175,55,.2);color:var(--text-dim);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s}
+.rp-close-btn:hover{background:rgba(212,175,55,.18);color:var(--gold)}
+.rp-mode-row{display:flex;align-items:center;gap:11px;padding:11px 14px;cursor:pointer;transition:background .15s;border-bottom:1px solid rgba(212,175,55,.06)}
+.rp-mode-row:last-of-type{border-bottom:none}
+.rp-mode-row:hover{background:rgba(212,175,55,.08)}
+.rp-mode-row.active{background:rgba(212,175,55,.1)}
+.rp-mode-icon{width:28px;height:28px;border-radius:50%;background:rgba(212,175,55,.08);border:1px solid rgba(212,175,55,.22);display:flex;align-items:center;justify-content:center;font-size:.72rem;color:var(--gold);flex-shrink:0}
+.rp-mode-info{flex:1;min-width:0}
+.rp-mode-name{font-family:'Josefin Sans',sans-serif;font-size:.76rem;color:var(--text-soft);letter-spacing:.5px}
+.rp-mode-sub{font-family:'Josefin Sans',sans-serif;font-size:.56rem;color:var(--text-dim);letter-spacing:.3px;margin-top:1px}
+.rp-check{width:16px;height:16px;border-radius:50%;border:1.5px solid rgba(212,175,55,.3);flex-shrink:0;transition:all .15s}
+.rp-check.checked{background:var(--gold);border-color:var(--gold);box-shadow:0 0 6px rgba(212,175,55,.4)}
+.rp-times-row{padding:10px 14px 8px;border-top:1px solid rgba(212,175,55,.12);display:none;flex-direction:column;gap:8px}
+.rp-times-row.visible{display:flex}
+.rp-times-label{font-family:'Josefin Sans',sans-serif;font-size:.58rem;letter-spacing:2px;text-transform:uppercase;color:rgba(212,175,55,.55)}
+.rp-times-btns{display:flex;gap:6px;flex-wrap:wrap}
+.rp-time-btn{background:rgba(212,175,55,.06);border:1px solid rgba(212,175,55,.22);border-radius:8px;color:var(--text-dim);font-family:'Josefin Sans',sans-serif;font-size:.7rem;font-weight:700;padding:6px 11px;cursor:pointer;transition:all .15s;letter-spacing:.5px}
+.rp-time-btn:hover{background:rgba(212,175,55,.15);color:var(--gold);border-color:var(--gold-border)}
+.rp-time-btn.active{background:var(--gold);border-color:var(--gold);color:#000}
+
 /* Tafsir Modal */
 #tafsir-modal { position:fixed; inset:0; z-index:4500; background:var(--bg); transform:translateY(100%); transition:transform .4s var(--spring); display:flex; flex-direction:column; padding-top:var(--safe-top); }
 #tafsir-modal.open { transform:translateY(0); }
@@ -809,52 +836,30 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 /* Spine — thin center line */
 #mfv-spine{position:absolute;left:50%;top:0;bottom:0;width:10px;transform:translateX(-50%);z-index:6;background:linear-gradient(90deg,rgba(0,0,0,.28) 0%,rgba(60,38,10,.18) 50%,rgba(0,0,0,.28) 100%);box-shadow:-1px 0 6px rgba(0,0,0,.35),1px 0 6px rgba(0,0,0,.35)}
 
-/* ── SMOOTH PAGE TURN — Arabic RTL: forward folds LEFT→RIGHT, back folds RIGHT→LEFT ── */
-#mfv-turn-pg{position:absolute;top:0;bottom:0;z-index:30;pointer-events:none;display:none;will-change:transform,opacity,border-radius;transform-style:preserve-3d}
-
-/* Forward (next): LEFT half peels away rightward — pivot on RIGHT edge */
-#mfv-turn-pg.tp-fwd{left:0;right:50%;background:linear-gradient(270deg,#ede3c0,#fdf9ee)}
-/* Backward (prev): RIGHT half peels away leftward — pivot on LEFT edge */
-#mfv-turn-pg.tp-back{right:0;left:50%;background:linear-gradient(90deg,#ede3c0,#fdf9ee)}
-
+/* ── PAGE TURN — simple horizontal slide (like image swiping) ── */
+#mfv-turn-pg{position:absolute;top:0;bottom:0;z-index:30;pointer-events:none;display:none;will-change:transform,opacity}
+#mfv-turn-pg.tp-fwd {left:0;right:0;background:#fdf9ee}
+#mfv-turn-pg.tp-back{left:0;right:0;background:#fdf9ee}
 #mfv-turn-pg canvas{display:block;width:100%!important;height:100%!important;object-fit:fill;position:absolute;inset:0}
 
-/* Shadow: cast toward spine as page lifts */
-#mfv-turn-pg.tp-fwd::after{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(270deg,rgba(0,0,0,.22) 0%,transparent 40%)}
-#mfv-turn-pg.tp-back::after{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(90deg,rgba(0,0,0,.22) 0%,transparent 40%)}
-
-/* Curl highlight — bright strip at the lifted free edge to simulate bend */
-#mfv-turn-pg.tp-fwd::before{content:'';position:absolute;left:0;top:0;bottom:0;width:18px;z-index:3;pointer-events:none;background:linear-gradient(90deg,rgba(255,255,255,.55),transparent)}
-#mfv-turn-pg.tp-back::before{content:'';position:absolute;right:0;top:0;bottom:0;width:18px;z-index:3;pointer-events:none;background:linear-gradient(270deg,rgba(255,255,255,.55),transparent)}
-
-/*
-  Arabic RTL forward (next) = LEFT page lifts, rotates positive Y (unfolds rightward), pivot = right edge
-  Arabic RTL backward (prev) = RIGHT page lifts, rotates negative Y (unfolds leftward), pivot = left edge
-
-  Bend simulation: border-radius at the free edge peaks mid-animation, simulating the page curling
-*/
-@keyframes mfv-turn-fwd{
-  0%  {opacity:1;transform:perspective(1600px) rotateY(0deg);border-radius:0 0 0 0;box-shadow:none}
-  25% {opacity:1;transform:perspective(1600px) rotateY(38deg);border-radius:0 12px 12px 0;box-shadow:8px 0 40px rgba(0,0,0,.45),2px 0 12px rgba(0,0,0,.3)}
-  60% {opacity:1;transform:perspective(1600px) rotateY(72deg);border-radius:0 20px 20px 0;box-shadow:4px 0 20px rgba(0,0,0,.3)}
-  100%{opacity:0;transform:perspective(1600px) rotateY(108deg) scale(.96);border-radius:0;box-shadow:none}
+/* Slide out to the right (forward = RTL next page) */
+@keyframes mfv-slide-fwd{
+  0%  {transform:translateX(0);   opacity:1;box-shadow:none}
+  100%{transform:translateX(100%);opacity:0;box-shadow:none}
 }
-@keyframes mfv-turn-back{
-  0%  {opacity:0;transform:perspective(1600px) rotateY(-108deg) scale(.96);border-radius:0;box-shadow:none}
-  40% {opacity:1;transform:perspective(1600px) rotateY(-72deg);border-radius:20px 0 0 20px;box-shadow:-4px 0 20px rgba(0,0,0,.3)}
-  75% {opacity:1;transform:perspective(1600px) rotateY(-38deg);border-radius:12px 0 0 12px;box-shadow:-8px 0 40px rgba(0,0,0,.45)}
-  100%{opacity:1;transform:perspective(1600px) rotateY(0deg);border-radius:0;box-shadow:none}
+/* Slide in from right (backward = RTL prev page) */
+@keyframes mfv-slide-back{
+  0%  {transform:translateX(100%);opacity:0}
+  100%{transform:translateX(0);   opacity:1}
 }
 
-/* Page flash — subtle pulse so user registers the turn */
-@keyframes mfv-flash{0%{opacity:0}12%{opacity:.12}100%{opacity:0}}
-#mfv-page-flash{position:absolute;inset:0;z-index:35;background:#fff;pointer-events:none;opacity:0}
-#mfv-page-flash.flash{animation:mfv-flash .5s ease-out forwards}
+#mfv-turn-pg.anim-fwd {display:block;animation:mfv-slide-fwd  .32s cubic-bezier(.4,0,.2,1) forwards}
+#mfv-turn-pg.anim-back{display:block;animation:mfv-slide-back .32s cubic-bezier(.4,0,.2,1) forwards}
 
-/* Forward: pivot RIGHT edge of the left-half panel */
-#mfv-turn-pg.anim-fwd {display:block;animation:mfv-turn-fwd .75s cubic-bezier(.4,0,.2,1) forwards;transform-origin:right center}
-/* Backward: pivot LEFT edge of the right-half panel */
-#mfv-turn-pg.anim-back{display:block;animation:mfv-turn-back .75s cubic-bezier(.4,0,.2,1) forwards;transform-origin:left center}
+/* Page flash — subtle indicator */
+@keyframes mfv-flash{0%{opacity:0}25%{opacity:.15}100%{opacity:0}}
+#mfv-page-flash{position:absolute;inset:0;z-index:35;background:#c8b06a;pointer-events:none;opacity:0}
+#mfv-page-flash.flash{animation:mfv-flash .32s ease-out forwards}
 
 /* PDF load progress */
 #mfv-load-screen{position:absolute;inset:0;z-index:60;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0e0a03;gap:20px;padding:30px;text-align:center}
@@ -1272,7 +1277,10 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
         <svg viewBox="0 0 24 24" id="play-icon"><path d="M8 5v14l11-7z"/></svg>
       </button>
       <div class="cap-wing cap-wing-r">
-        <button class="cap-wing-btn" id="repeat-btn">1×</button>
+        <button class="cap-wing-btn" id="repeat-btn" aria-label="Repeat options" style="position:relative;display:flex;align-items:center;gap:3px">
+          <svg id="repeat-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+          <span id="repeat-badge" style="font-size:.58rem;font-weight:700;letter-spacing:.5px;min-width:10px;line-height:1"></span>
+        </button>
       </div>
     </div>
     <button class="dock-nav-btn" id="next-surah-btn" aria-label="Next Surah">
@@ -1324,6 +1332,59 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
     <div class="ctx-footer-line"></div>
     <span class="ctx-footer-gem">✦ ✦ ✦</span>
     <div class="ctx-footer-line"></div>
+  </div>
+</div>
+
+<!-- REPEAT POPUP -->
+<div id="repeat-popup-backdrop"></div>
+<div id="repeat-popup">
+  <div class="rp-header">
+    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="var(--gold)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+    <span class="rp-title">Repeat Mode</span>
+    <button class="rp-close-btn" id="rp-close-btn" onclick="App._closeRepeatPopup()">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+    </button>
+  </div>
+
+  <!-- Mode rows -->
+  <div class="rp-mode-row" id="rp-mode-off"    onclick="App._setRepeatMode('none')">
+    <div class="rp-mode-icon">✕</div>
+    <div class="rp-mode-info"><div class="rp-mode-name">Off</div><div class="rp-mode-sub">No repeat</div></div>
+    <div class="rp-check" id="rp-check-off"></div>
+  </div>
+  <div class="rp-mode-row" id="rp-mode-ayah"   onclick="App._setRepeatMode('ayah')">
+    <div class="rp-mode-icon">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+    </div>
+    <div class="rp-mode-info"><div class="rp-mode-name">Repeat Ayah</div><div class="rp-mode-sub">Repeat current verse</div></div>
+    <div class="rp-check" id="rp-check-ayah"></div>
+  </div>
+  <div class="rp-mode-row" id="rp-mode-surah"  onclick="App._setRepeatMode('surah')">
+    <div class="rp-mode-icon">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+    </div>
+    <div class="rp-mode-info"><div class="rp-mode-name">Repeat Surah</div><div class="rp-mode-sub">Loop entire surah</div></div>
+    <div class="rp-check" id="rp-check-surah"></div>
+  </div>
+  <div class="rp-mode-row" id="rp-mode-quran"  onclick="App._setRepeatMode('quran')">
+    <div class="rp-mode-icon">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z"/></svg>
+    </div>
+    <div class="rp-mode-info"><div class="rp-mode-name">Continue Full Quran</div><div class="rp-mode-sub">Auto-advance surah by surah</div></div>
+    <div class="rp-check" id="rp-check-quran"></div>
+  </div>
+
+  <!-- Times row (hidden when mode is off or quran) -->
+  <div class="rp-times-row" id="rp-times-row">
+    <div class="rp-times-label">Times</div>
+    <div class="rp-times-btns" id="rp-times-btns">
+      <button class="rp-time-btn" data-val="1"  onclick="App._setRepeatTimes(1)">1×</button>
+      <button class="rp-time-btn" data-val="2"  onclick="App._setRepeatTimes(2)">2×</button>
+      <button class="rp-time-btn" data-val="3"  onclick="App._setRepeatTimes(3)">3×</button>
+      <button class="rp-time-btn" data-val="5"  onclick="App._setRepeatTimes(5)">5×</button>
+      <button class="rp-time-btn" data-val="10" onclick="App._setRepeatTimes(10)">10×</button>
+      <button class="rp-time-btn" data-val="Infinity" onclick="App._setRepeatTimes(Infinity)">∞</button>
+    </div>
   </div>
 </div>
 
@@ -1977,6 +2038,15 @@ const TrAudio={
             return;
           }
         }
+        // Full Quran continue mode
+        if(App.s.repeatMode==='quran'){
+          const nextS=this._surahNum<114?this._surahNum+1:1;
+          App.loadSurah(nextS).then(()=>{
+            TrAudio.startSurah(nextS,1,App.s.totalAyahs,App.s.translation);
+            App._setPlayingUI(true);
+          });
+          return;
+        }
         this.stopSurah(); App.toast('Translation complete','info');
       }
     };
@@ -2302,7 +2372,8 @@ const Audio_={
   onEnded(){
     App.clearHighlight();
     const{currentSurah:s,currentAyah:a,totalAyahs:t,repeatMax:rMax,repeatCount:rCnt}=App.s;
-    if(App.s.repeatMode!=='none'&&rCnt<rMax-1){App.s.repeatCount=rCnt+1;this.el.currentTime=0;this.el.play().catch(()=>{});return;}
+    /* Ayah repeat */
+    if(App.s.repeatMode==='ayah'&&rCnt<rMax-1){App.s.repeatCount=rCnt+1;this.el.currentTime=0;this.el.play().catch(()=>{});return;}
     App.s.repeatCount=0;
     if(App.sleepTimer.shouldStop){App.sleepTimer.finish();return;}
     if(this._singleAyahMode){
@@ -2340,6 +2411,37 @@ const Audio_={
         App.onPlay(s, a + 1);
     }
     else{
+      /* Surah repeat mode */
+      if(App.s.repeatMode==='surah'){
+        const cnt=App.s.repeatCount||0;
+        const max=App.s.repeatMax;
+        if(max===Infinity||cnt<max-1){
+          App.s.repeatCount=(cnt+1);
+          this._playAyahFile(s,1);App.onPlay(s,1);return;
+        }
+        App.s.repeatCount=0;
+        /* Fall through to stop */
+      }
+      /* Full Quran continue */
+      if(App.s.repeatMode==='quran'){
+        const next=s<114?s+1:1;
+        App.s.isPlaying=true; // keep playing state so UI stays active
+        App.loadSurah(next).then(()=>{
+          // Play Arabic
+          if(!App.s.trMode){
+            Audio_.play(next,1);
+            App._setPlayingUI(true);
+          }
+          // Play translation
+          else{
+            setTimeout(()=>{
+              TrAudio.startSurah(next,1,App.s.totalAyahs,App.s.translation);
+              App._setPlayingUI(true);
+            },400);
+          }
+        });
+        return;
+      }
       // In Juz mode — advance to next surah instead of stopping
       if(App._juzMode && App._juzSurahList && App._juzSurahList.length){
         const idx=App._juzSurahList.findIndex(x=>x.surahNum===s);
@@ -2755,8 +2857,12 @@ const App={
     document.body.classList.toggle('light-theme',!this.s.isDark);
     document.getElementById('speed-btn').textContent=this.s.speed+'×';
     document.getElementById('mini-speed-lbl').textContent=this.s.speed+'×';
-    const rLbl=this.s.repeatMax===Infinity?'∞':this.s.repeatMax+'×';
-    document.getElementById('repeat-btn').textContent=rLbl;
+    const rLbl=this.s.repeatMax===Infinity?'∞':(this.s.repeatMax>1?this.s.repeatMax+'×':'');
+    const badge=document.getElementById('repeat-badge');
+    if(badge)badge.textContent=this.s.repeatMode==='none'?'':rLbl;
+    const rIcon=document.getElementById('repeat-icon');
+    if(rIcon)rIcon.style.opacity=this.s.repeatMode==='none'?'0.45':'1';
+    if(rIcon)rIcon.style.stroke=this.s.repeatMode==='none'?'currentColor':'var(--gold)';
     this._setTgl('tgl-wbw',this.s.showWbw);
     this._setTgl('tgl-trans',this.s.showTrans);
     this._setTgl('tgl-translit',this.s.showTranslit);
@@ -2954,12 +3060,11 @@ const App={
     });
     document.getElementById('mini-speed').addEventListener('click',()=>this._cycleSpeed());
     document.getElementById('speed-btn').addEventListener('click',()=>this._cycleSpeed());
-    document.getElementById('repeat-btn').addEventListener('click',()=>{
-      const reps=this.REPEATS;const idx=reps.indexOf(this.s.repeatMax);const nr=reps[(idx+1)%reps.length];
-      this.persist('repeatMax',nr);this.persist('repeatMode',nr===1?'none':'ayah');this.s.repeatCount=0;
-      const lbl=nr===Infinity?'∞':nr+'×';document.getElementById('repeat-btn').textContent=lbl;
-      this.toast(nr===1?'Repeat off':`Repeat ${lbl}`);
+    document.getElementById('repeat-btn').addEventListener('click', e => {
+      e.stopPropagation();
+      this._openRepeatPopup();
     });
+    document.getElementById('repeat-popup-backdrop').addEventListener('click', () => this._closeRepeatPopup());
 
     document.getElementById('home-btn').addEventListener('click',()=>{
       this.showHome();
@@ -4113,6 +4218,65 @@ const App={
   },
   _closeConfirm(){document.getElementById('app-confirm').classList.remove('open');this._confirmCb=null;},
 
+  /* ── REPEAT POPUP ── */
+  _openRepeatPopup(){
+    const btn=document.getElementById('repeat-btn');
+    const popup=document.getElementById('repeat-popup');
+    const backdrop=document.getElementById('repeat-popup-backdrop');
+    /* Position popup above button */
+    const rect=btn.getBoundingClientRect();
+    popup.style.bottom=(window.innerHeight-rect.top+8)+'px';
+    popup.style.right=(window.innerWidth-rect.right+0)+'px';
+    backdrop.style.display='block'; requestAnimationFrame(()=>{ backdrop.style.opacity='1'; popup.classList.add('open'); });
+    this._syncRepeatPopupUI();
+  },
+  _closeRepeatPopup(){
+    document.getElementById('repeat-popup').classList.remove('open');
+    const bd=document.getElementById('repeat-popup-backdrop');
+    bd.style.opacity='0'; setTimeout(()=>{ bd.style.display='none'; },220);
+  },
+  _syncRepeatPopupUI(){
+    const mode=this.s.repeatMode||'none';
+    const max=this.s.repeatMax;
+    ['off','ayah','surah','quran'].forEach(m=>{
+      const row=document.getElementById('rp-mode-'+m);
+      const chk=document.getElementById('rp-check-'+m);
+      const active=(m==='off'&&mode==='none')||(m!=='off'&&mode===m);
+      if(row)row.classList.toggle('active',active);
+      if(chk)chk.classList.toggle('checked',active);
+    });
+    const timesRow=document.getElementById('rp-times-row');
+    if(timesRow) timesRow.classList.toggle('visible', mode==='ayah'||mode==='surah');
+    document.querySelectorAll('.rp-time-btn').forEach(b=>{
+      const v=b.dataset.val==='Infinity'?Infinity:parseInt(b.dataset.val);
+      b.classList.toggle('active', v===max);
+    });
+  },
+  _setRepeatMode(mode){
+    this.persist('repeatMode',mode);
+    if(mode==='none'){this.persist('repeatMax',1);this.s.repeatMax=1;}
+    else if(this.s.repeatMax===1){this.persist('repeatMax',2);this.s.repeatMax=2;}
+    this.s.repeatMode=mode; this.s.repeatCount=0;
+    this._syncRepeatPopupUI();
+    this._syncRepeatBtnUI();
+    const labels={none:'Repeat off',ayah:'Repeat Ayah',surah:'Repeat Surah',quran:'Continue Full Quran'};
+    this.toast(labels[mode]||'');
+  },
+  _setRepeatTimes(val){
+    this.persist('repeatMax',val); this.s.repeatMax=val; this.s.repeatCount=0;
+    this._syncRepeatPopupUI();
+    this._syncRepeatBtnUI();
+    this.toast(val===Infinity?'Repeat ∞':'Repeat '+val+'×');
+  },
+  _syncRepeatBtnUI(){
+    const mode=this.s.repeatMode||'none';
+    const max=this.s.repeatMax;
+    const badge=document.getElementById('repeat-badge');
+    const icon=document.getElementById('repeat-icon');
+    if(badge) badge.textContent=mode==='none'?'':(max===Infinity?'∞':(max>1?max+'×':''));
+    if(icon){ icon.style.stroke=mode==='none'?'currentColor':'var(--gold)'; icon.style.opacity=mode==='none'?'0.45':'1'; }
+  },
+
   toast(msg,type=''){
     const wrap=document.getElementById('toast-container');const el=document.createElement('div');
     el.className=`toast${type?' '+type:''}`;el.textContent=msg;wrap.appendChild(el);
@@ -4468,10 +4632,9 @@ const MushafFlipbook = {
 
     const tp  = document.getElementById('mfv-turn-pg');
     const tc  = document.getElementById('mfv-canvas-turn');
-    /* RTL: forward = LEFT page peels rightward; backward = RIGHT page peels leftward */
-    const src = document.getElementById(dir === 'fwd' ? 'mfv-canvas-left' : 'mfv-canvas-right');
+    /* Slide: snapshot the whole current spread onto turn canvas (show the outgoing page) */
+    const src = document.getElementById(dir === 'fwd' ? 'mfv-canvas-right' : 'mfv-canvas-left');
 
-    /* Copy current visible page onto turn canvas */
     if (src && src.width > 0) {
       tc.width = src.width; tc.height = src.height;
       tc.style.width = src.style.width; tc.style.height = src.style.height;
@@ -4482,23 +4645,23 @@ const MushafFlipbook = {
     tp.classList.add(dir === 'fwd' ? 'tp-fwd' : 'tp-back');
     tp.style.display = 'block';
 
-    /* Advance spread BEFORE animation renders new content under the flipping page */
+    /* Render new spread underneath before slide begins */
     if (dir === 'fwd') this.spread++; else this.spread--;
     this._renderSpread();
     this._updateFooter();
     this._updateBkBtn();
 
-    /* Trigger animation on next frame */
+    /* Trigger slide animation */
     requestAnimationFrame(() => requestAnimationFrame(() => {
       tp.classList.add(dir === 'fwd' ? 'anim-fwd' : 'anim-back');
     }));
 
-    /* Flash so user sees the turn happened clearly */
+    /* Flash */
     const flash = document.getElementById('mfv-page-flash');
     flash.classList.remove('flash');
     requestAnimationFrame(() => requestAnimationFrame(() => flash.classList.add('flash')));
 
-    await new Promise(r => setTimeout(r, 750));
+    await new Promise(r => setTimeout(r, 360));
     tp.className = '';
     tp.style.display = 'none';
     flash.classList.remove('flash');
