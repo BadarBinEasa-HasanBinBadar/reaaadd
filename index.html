@@ -757,37 +757,43 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 .mfv-cancel-btn:hover{color:var(--text);border-color:var(--gold-border)}
 
 /* ═══════════════════════════════════════════════════════════
-   MUSHAF FLIPBOOK VIEWER — FULL SCREEN 3D FLIPBOOK
+   MUSHAF FLIPBOOK VIEWER — TRUE FULL-SCREEN PDF READER
    ═══════════════════════════════════════════════════════════ */
-#mushaf-flipbook-viewer{position:fixed;inset:0;z-index:8000;background:#120e04;display:flex;flex-direction:column;transform:translateY(100%);transition:transform .48s cubic-bezier(.4,0,.2,1);padding-top:var(--safe-top);user-select:none;-webkit-user-select:none}
+#mushaf-flipbook-viewer{position:fixed;inset:0;z-index:8000;background:#0a0700;display:flex;flex-direction:column;transform:translateY(100%);transition:transform .48s cubic-bezier(.4,0,.2,1);user-select:none;-webkit-user-select:none;touch-action:pan-x pan-y}
 #mushaf-flipbook-viewer.mfv-open{transform:translateY(0)}
 
-/* Header */
-#mfv-header{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:rgba(6,4,1,.97);border-bottom:1px solid rgba(212,175,55,.22);flex-shrink:0;gap:10px;z-index:10}
-.mfv-hdr-btn{width:36px;height:36px;border-radius:50%;background:none;border:1px solid rgba(212,175,55,.32);color:var(--gold);cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:background .2s,border-color .2s}
-.mfv-hdr-btn:hover{background:var(--gold-soft)}
-.mfv-hdr-btn.bookmarked{color:var(--gold);border-color:var(--gold);background:var(--gold-soft)}
+/* ── FLOATING CONTROLS BAR (overlaid above PDF) ── */
+#mfv-header{position:absolute;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:calc(var(--safe-top) + 8px) 14px 10px;background:linear-gradient(to bottom,rgba(0,0,0,.82) 0%,rgba(0,0,0,.5) 70%,transparent 100%);gap:8px;transition:opacity .35s,transform .35s cubic-bezier(.4,0,.2,1);pointer-events:auto}
+#mfv-header.mfv-bars-hidden{opacity:0;transform:translateY(-100%);pointer-events:none}
+.mfv-hdr-btn{width:38px;height:38px;border-radius:50%;background:rgba(0,0,0,.55);border:1px solid rgba(212,175,55,.45);color:var(--gold);cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:background .2s,border-color .2s;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.mfv-hdr-btn:hover{background:rgba(212,175,55,.25);border-color:var(--gold)}
+.mfv-hdr-btn:active{transform:scale(.9)}
+.mfv-hdr-btn.bookmarked{color:var(--gold);border-color:var(--gold);background:rgba(212,175,55,.3)}
 .mfv-hdr-btn svg{width:16px;height:16px;fill:currentColor}
 #mfv-title-wrap{text-align:center;flex:1;min-width:0}
-#mfv-viewer-title{font-family:var(--ar-font);font-size:1.15rem;color:var(--gold);direction:rtl;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-#mfv-viewer-sub{font-family:'Josefin Sans',sans-serif;font-size:.52rem;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);margin-top:1px}
+#mfv-viewer-title{font-family:var(--ar-font);font-size:1.1rem;color:var(--gold);direction:rtl;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 1px 8px rgba(0,0,0,.8)}
+#mfv-viewer-sub{font-family:'Josefin Sans',sans-serif;font-size:.5rem;letter-spacing:2px;text-transform:uppercase;color:rgba(212,175,55,.7);margin-top:1px;text-shadow:0 1px 4px rgba(0,0,0,.8)}
 
-/* Stage */
-#mfv-stage{flex:1;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;min-height:0;background:radial-gradient(ellipse at 50% 40%,#2e1f08 0%,#0d0904 55%,#060402 100%);perspective:2200px}
-#mfv-stage::before{content:'';position:absolute;bottom:0;left:0;right:0;height:25%;background:linear-gradient(to top,rgba(212,175,55,.035),transparent);pointer-events:none;z-index:1}
+/* ── FLOATING BOTTOM BAR (page nav) ── */
+#mfv-footer{position:absolute;bottom:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:10px 18px calc(var(--safe-bottom) + 10px);background:linear-gradient(to top,rgba(0,0,0,.82) 0%,rgba(0,0,0,.5) 70%,transparent 100%);gap:12px;transition:opacity .35s,transform .35s cubic-bezier(.4,0,.2,1);pointer-events:auto}
+#mfv-footer.mfv-bars-hidden{opacity:0;transform:translateY(100%);pointer-events:none}
+.mfv-nav-btn{background:rgba(0,0,0,.55);border:1px solid rgba(212,175,55,.4);color:var(--gold);border-radius:100px;padding:9px 24px;font-family:'Josefin Sans',sans-serif;font-size:.66rem;letter-spacing:1.5px;cursor:pointer;transition:background .2s,opacity .2s;min-width:80px;text-align:center;white-space:nowrap;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.mfv-nav-btn:hover{background:rgba(212,175,55,.25)}
+.mfv-nav-btn:active{transform:scale(.95)}
+.mfv-nav-btn:disabled{opacity:.25;pointer-events:none}
+#mfv-page-info{font-family:'Josefin Sans',sans-serif;font-size:.62rem;letter-spacing:2px;color:rgba(212,175,55,.85);text-align:center;flex:1;text-shadow:0 1px 6px rgba(0,0,0,.9)}
 
-/* Book */
-#mfv-book{position:relative;display:flex;align-items:stretch;height:calc(100% - 24px);max-height:740px;width:min(100% - 24px, 920px);border-radius:4px 4px 2px 2px;box-shadow:0 32px 90px rgba(0,0,0,.85),0 12px 35px rgba(0,0,0,.65),0 0 0 1px rgba(212,175,55,.14),inset 0 1px 0 rgba(255,255,255,.04);transform-style:preserve-3d;z-index:2}
+/* ── STAGE = TRUE FULL SCREEN ── */
+#mfv-stage{position:absolute;inset:0;display:flex;align-items:stretch;justify-content:stretch;overflow:hidden;touch-action:pinch-zoom pan-x pan-y}
 
-/* Page panels */
-.mfv-page{flex:1;background:#fdf9ee;position:relative;overflow:hidden;display:flex;align-items:stretch}
-.mfv-page canvas{display:block;width:100%!important;height:100%!important;object-fit:contain}
-.mfv-page::after{content:'';position:absolute;inset:0;pointer-events:none;z-index:5;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");background-size:160px;opacity:.45;mix-blend-mode:multiply}
-.mfv-page-left{border-radius:4px 0 0 4px;box-shadow:inset -14px 0 28px rgba(0,0,0,.16),inset -2px 0 8px rgba(0,0,0,.1)}
-.mfv-page-right{border-radius:0 4px 4px 0;box-shadow:inset 14px 0 28px rgba(0,0,0,.16),inset 2px 0 8px rgba(0,0,0,.1)}
-.mfv-pg-num{position:absolute;bottom:6px;z-index:10;font-family:'Josefin Sans',sans-serif;font-size:.5rem;letter-spacing:2px;color:rgba(100,70,20,.55);text-transform:uppercase;pointer-events:none}
-.mfv-page-left  .mfv-pg-num{left:10px}
-.mfv-page-right .mfv-pg-num{right:10px}
+/* ── BOOK fills entire stage ── */
+#mfv-book{position:absolute;inset:0;display:flex;align-items:stretch;transform-origin:center center}
+
+/* Page panels — absolutely fill their half (or full on mobile) */
+.mfv-page{position:absolute;top:0;bottom:0;background:#fdf9ee;overflow:hidden;display:flex;align-items:stretch}
+.mfv-page-left{left:0;width:50%}
+.mfv-page-right{right:0;width:50%}
+.mfv-page canvas{display:block;width:100%!important;height:100%!important;object-fit:fill}
 
 /* Page loader */
 .mfv-pg-loader{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:#fdf9ee;z-index:8}
@@ -795,39 +801,45 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 @keyframes mfv-spin{to{transform:rotate(360deg)}}
 .mfv-pg-lbl{font-family:'Josefin Sans',sans-serif;font-size:.56rem;letter-spacing:2px;text-transform:uppercase;color:rgba(139,100,20,.45)}
 
-/* Spine */
-#mfv-spine{width:16px;flex-shrink:0;position:relative;z-index:6;background:linear-gradient(90deg,rgba(0,0,0,.32) 0%,rgba(55,35,8,.22) 30%,rgba(70,45,12,.18) 50%,rgba(55,35,8,.22) 70%,rgba(0,0,0,.32) 100%);box-shadow:-2px 0 10px rgba(0,0,0,.45),2px 0 10px rgba(0,0,0,.45)}
-#mfv-spine::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.2) 0%,transparent 50%,rgba(0,0,0,.2) 100%)}
+/* Page numbers — tiny overlay */
+.mfv-pg-num{position:absolute;bottom:4px;z-index:10;font-family:'Josefin Sans',sans-serif;font-size:.48rem;letter-spacing:1.5px;color:rgba(100,70,20,.45);pointer-events:none}
+.mfv-page-left .mfv-pg-num{left:8px}
+.mfv-page-right .mfv-pg-num{right:8px}
 
-/* ── 3D TURNING PAGE ── */
-#mfv-turn-pg{position:absolute;top:0;bottom:0;z-index:20;pointer-events:none;display:none;transform-style:preserve-3d;backface-visibility:hidden;-webkit-backface-visibility:hidden;will-change:transform,opacity}
-#mfv-turn-pg.tp-fwd{right:0;width:50%;transform-origin:left center;background:linear-gradient(90deg,#fdf9ee,#f2e9c8)}
-#mfv-turn-pg.tp-back{left:0;width:50%;transform-origin:right center;background:linear-gradient(270deg,#fdf9ee,#f2e9c8)}
-#mfv-turn-pg canvas{display:block;width:100%!important;height:100%!important;object-fit:contain;position:absolute;inset:0}
-#mfv-turn-pg::before{content:'';position:absolute;inset:0;z-index:2;pointer-events:none}
-#mfv-turn-pg.tp-fwd::before{background:linear-gradient(90deg,rgba(0,0,0,.22) 0%,transparent 35%)}
-#mfv-turn-pg.tp-back::before{background:linear-gradient(270deg,rgba(0,0,0,.22) 0%,transparent 35%)}
-#mfv-turn-pg::after{content:'';position:absolute;top:0;bottom:0;width:4px;z-index:3;pointer-events:none}
-#mfv-turn-pg.tp-fwd::after{left:0;background:linear-gradient(90deg,rgba(0,0,0,.18),transparent)}
-#mfv-turn-pg.tp-back::after{right:0;background:linear-gradient(270deg,rgba(0,0,0,.18),transparent)}
-#mfv-turn-shadow{position:absolute;top:0;bottom:0;width:30%;z-index:15;pointer-events:none;opacity:0;transition:opacity .08s;display:none}
+/* Spine — thin center line */
+#mfv-spine{position:absolute;left:50%;top:0;bottom:0;width:10px;transform:translateX(-50%);z-index:6;background:linear-gradient(90deg,rgba(0,0,0,.28) 0%,rgba(60,38,10,.18) 50%,rgba(0,0,0,.28) 100%);box-shadow:-1px 0 6px rgba(0,0,0,.35),1px 0 6px rgba(0,0,0,.35)}
 
-/* Quran is RTL — forward = next pages (spread++) — the right page lifts and folds left */
+/* ── SMOOTH PAGE TURN — slide + fade ── */
+#mfv-turn-pg{position:absolute;top:0;bottom:0;z-index:30;pointer-events:none;display:none;will-change:transform,opacity;overflow:hidden}
+#mfv-turn-pg.tp-fwd{right:0;left:50%;background:#fdf9ee}
+#mfv-turn-pg.tp-back{left:0;right:50%;background:#fdf9ee}
+#mfv-turn-pg canvas{display:block;width:100%!important;height:100%!important;object-fit:fill;position:absolute;inset:0}
+#mfv-turn-pg::after{content:'';position:absolute;inset:0;z-index:2;pointer-events:none}
+#mfv-turn-pg.tp-fwd::after{background:linear-gradient(90deg,rgba(0,0,0,.18) 0%,transparent 30%)}
+#mfv-turn-pg.tp-back::after{background:linear-gradient(270deg,rgba(0,0,0,.18) 0%,transparent 30%)}
+
+/* Page turn animations — clear visible slide + 3D fold */
 @keyframes mfv-turn-fwd{
-  0%  {opacity:1;transform:perspective(1800px) rotateY(0deg);box-shadow:none}
-  35% {opacity:1;transform:perspective(1800px) rotateY(-50deg);box-shadow:-22px 0 55px rgba(0,0,0,.45)}
-  100%{opacity:0;transform:perspective(1800px) rotateY(-105deg);box-shadow:none}
+  0%  {opacity:1;transform:perspective(1400px) rotateY(0deg);box-shadow:none}
+  40% {opacity:1;transform:perspective(1400px) rotateY(-55deg);box-shadow:-18px 0 50px rgba(0,0,0,.5)}
+  100%{opacity:0;transform:perspective(1400px) rotateY(-110deg) scale(.97);box-shadow:none}
 }
 @keyframes mfv-turn-back{
-  0%  {opacity:0;transform:perspective(1800px) rotateY(-105deg);box-shadow:none}
-  35% {opacity:1;transform:perspective(1800px) rotateY(-50deg);box-shadow:-22px 0 55px rgba(0,0,0,.45)}
-  100%{opacity:1;transform:perspective(1800px) rotateY(0deg);box-shadow:none}
+  0%  {opacity:0;transform:perspective(1400px) rotateY(-110deg) scale(.97);box-shadow:none}
+  40% {opacity:1;transform:perspective(1400px) rotateY(-55deg);box-shadow:-18px 0 50px rgba(0,0,0,.5)}
+  100%{opacity:1;transform:perspective(1400px) rotateY(0deg);box-shadow:none}
 }
-#mfv-turn-pg.anim-fwd {display:block;animation:mfv-turn-fwd .7s cubic-bezier(.4,0,.2,1) forwards}
-#mfv-turn-pg.anim-back{display:block;animation:mfv-turn-back .7s cubic-bezier(.4,0,.2,1) forwards}
+
+/* Page flash — bright ripple so user KNOWS a page turned */
+@keyframes mfv-flash{0%{opacity:0}15%{opacity:.18}100%{opacity:0}}
+#mfv-page-flash{position:absolute;inset:0;z-index:35;background:#fff;pointer-events:none;opacity:0}
+#mfv-page-flash.flash{animation:mfv-flash .55s ease-out forwards}
+
+#mfv-turn-pg.anim-fwd {display:block;animation:mfv-turn-fwd .72s cubic-bezier(.4,0,.2,1) forwards;transform-origin:left center}
+#mfv-turn-pg.anim-back{display:block;animation:mfv-turn-back .72s cubic-bezier(.4,0,.2,1) forwards;transform-origin:right center}
 
 /* PDF load progress */
-#mfv-load-screen{position:absolute;inset:0;z-index:28;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0e0a03;gap:20px;padding:30px;text-align:center}
+#mfv-load-screen{position:absolute;inset:0;z-index:60;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0e0a03;gap:20px;padding:30px;text-align:center}
 #mfv-load-screen.hidden{display:none}
 .mfv-load-ar{font-family:var(--ar-font);font-size:2.2rem;color:var(--gold);direction:rtl;animation:breathe 2s ease-in-out infinite}
 .mfv-load-track{width:220px;height:3px;background:rgba(212,175,55,.1);border-radius:3px;overflow:hidden}
@@ -835,7 +847,7 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 .mfv-load-lbl{font-family:'Josefin Sans',sans-serif;font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim)}
 
 /* Error */
-#mfv-error-screen{position:absolute;inset:0;z-index:30;display:none;flex-direction:column;align-items:center;justify-content:center;background:#0e0a03;gap:16px;padding:30px;text-align:center}
+#mfv-error-screen{position:absolute;inset:0;z-index:62;display:none;flex-direction:column;align-items:center;justify-content:center;background:#0e0a03;gap:16px;padding:30px;text-align:center}
 #mfv-error-screen.visible{display:flex}
 .mfv-err-icon{font-size:2.8rem;opacity:.35}
 .mfv-err-title{font-family:'Cormorant Garamond',serif;font-size:1.35rem;color:var(--text-dim)}
@@ -844,24 +856,61 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 .mfv-err-btn:hover{background:rgba(212,175,55,.2)}
 
 /* Swipe hint */
-#mfv-swipe-hint{position:absolute;bottom:80px;left:50%;transform:translateX(-50%);z-index:25;background:rgba(0,0,0,.72);border:1px solid rgba(212,175,55,.28);border-radius:100px;padding:8px 20px;font-family:'Josefin Sans',sans-serif;font-size:.58rem;letter-spacing:2px;color:var(--gold);text-transform:uppercase;white-space:nowrap;pointer-events:none;opacity:0;animation:mfv-hint 5s ease-in-out 1.8s forwards}
+#mfv-swipe-hint{position:absolute;bottom:80px;left:50%;transform:translateX(-50%);z-index:55;background:rgba(0,0,0,.72);border:1px solid rgba(212,175,55,.28);border-radius:100px;padding:8px 20px;font-family:'Josefin Sans',sans-serif;font-size:.58rem;letter-spacing:2px;color:var(--gold);text-transform:uppercase;white-space:nowrap;pointer-events:none;opacity:0;animation:mfv-hint 5s ease-in-out 1.8s forwards}
 @keyframes mfv-hint{0%{opacity:0;transform:translateX(-50%) translateY(8px)}20%{opacity:1;transform:translateX(-50%) translateY(0)}78%{opacity:1}100%{opacity:0}}
 
-/* Footer */
-#mfv-footer{display:flex;align-items:center;justify-content:space-between;padding:9px 20px;padding-bottom:calc(9px + var(--safe-bottom));background:rgba(6,4,1,.97);border-top:1px solid rgba(212,175,55,.16);flex-shrink:0;gap:12px}
-.mfv-nav-btn{background:none;border:1px solid rgba(212,175,55,.32);color:var(--gold);border-radius:100px;padding:8px 22px;font-family:'Josefin Sans',sans-serif;font-size:.66rem;letter-spacing:1.5px;cursor:pointer;transition:background .2s,opacity .2s;min-width:78px;text-align:center;white-space:nowrap}
-.mfv-nav-btn:hover{background:var(--gold-soft)}
-.mfv-nav-btn:disabled{opacity:.2;pointer-events:none}
-#mfv-page-info{font-family:'Josefin Sans',sans-serif;font-size:.6rem;letter-spacing:2px;color:var(--text-dim);text-align:center;flex:1}
-
-/* Mobile — single page */
+/* Mobile — single page full width */
 @media(max-width:600px){
   .mfv-page-left{display:none}
   #mfv-spine{display:none}
-  .mfv-page-right{border-radius:4px}
-  #mfv-turn-pg.tp-fwd{left:0;right:0;width:100%;transform-origin:left center}
-  #mfv-turn-pg.tp-back{left:0;right:0;width:100%;transform-origin:right center}
+  .mfv-page-right{left:0;right:0;width:100%}
+  #mfv-turn-pg.tp-fwd{left:0;right:0}
+  #mfv-turn-pg.tp-back{left:0;right:0}
 }
+
+/* ── MUSHAF SEARCH OVERLAY (full panel) ── */
+#mfv-surah-search{position:absolute;top:0;left:0;right:0;bottom:0;z-index:55;background:rgba(8,6,2,.97);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);display:none;flex-direction:column;padding-top:var(--safe-top)}
+#mfv-surah-search.mfv-ss-open{display:flex}
+#mfv-ss-hdr{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid rgba(212,175,55,.18);flex-shrink:0}
+#mfv-ss-close{width:36px;height:36px;border-radius:50%;background:none;border:1px solid rgba(212,175,55,.35);color:var(--gold);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .2s}
+#mfv-ss-close:hover{background:var(--gold-soft)}
+#mfv-ss-close svg{width:16px;height:16px;fill:currentColor}
+#mfv-surah-input{flex:1;background:rgba(28,20,5,.9);border:1px solid rgba(212,175,55,.35);border-radius:11px;padding:10px 15px;color:#f0e8cc;font-family:'Josefin Sans',sans-serif;font-size:.85rem;-webkit-user-select:text;user-select:text;transition:border-color .2s}
+#mfv-surah-input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(212,175,55,.12)}
+#mfv-surah-input::placeholder{color:rgba(212,175,55,.38)}
+#mfv-ss-tabs{display:flex;border-bottom:1px solid rgba(212,175,55,.14);flex-shrink:0}
+.mfv-ss-tab{flex:1;padding:11px 6px;background:none;border:none;color:rgba(212,175,55,.5);font-family:'Josefin Sans',sans-serif;font-size:.65rem;letter-spacing:2.5px;text-transform:uppercase;cursor:pointer;position:relative;transition:color .2s}
+.mfv-ss-tab.active{color:var(--gold)}
+.mfv-ss-tab.active::after{content:'';position:absolute;bottom:0;left:15%;right:15%;height:2px;background:var(--gold);border-radius:2px 2px 0 0}
+#mfv-surah-results{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 0 20px}
+.mfv-ss-section{font-family:'Josefin Sans',sans-serif;font-size:.5rem;letter-spacing:3px;text-transform:uppercase;color:rgba(212,175,55,.55);padding:12px 16px 5px;display:flex;align-items:center;gap:8px}
+.mfv-ss-section::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(212,175,55,.18),transparent)}
+.mfv-ss-item{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid rgba(212,175,55,.07);cursor:pointer;transition:background .15s}
+.mfv-ss-item:last-child{border-bottom:none}
+.mfv-ss-item:hover,.mfv-ss-item:active{background:rgba(212,175,55,.1)}
+.mfv-ss-num{width:30px;height:30px;border:1px solid rgba(212,175,55,.4);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.62rem;color:var(--gold);flex-shrink:0;font-family:'Josefin Sans',sans-serif;font-weight:700}
+.mfv-ss-name{flex:1;font-family:'Josefin Sans',sans-serif;font-size:.8rem;color:#d8cba8}
+.mfv-ss-page{font-family:'Josefin Sans',sans-serif;font-size:.6rem;color:rgba(212,175,55,.55);letter-spacing:1px;text-align:right}
+.mfv-ss-ar{font-family:var(--ar-font);font-size:1.15rem;color:var(--gold);direction:rtl;flex-shrink:0}
+.mfv-ss-juz-badge{width:36px;height:36px;border-radius:50%;background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.4);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.mfv-ss-juz-n{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;color:var(--gold)}
+
+/* ── BOOKMARK POPUP ── */
+#mfv-bk-popup{position:absolute;z-index:70;background:linear-gradient(160deg,#1a1205,#120d03);border:1px solid rgba(212,175,55,.4);border-radius:18px;padding:18px 18px 14px;width:min(300px,90vw);box-shadow:0 20px 60px rgba(0,0,0,.85),0 4px 20px rgba(212,175,55,.12);display:none;flex-direction:column;gap:12px}
+#mfv-bk-popup.open{display:flex}
+#mfv-bk-popup-title{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--gold);font-weight:600}
+#mfv-bk-popup-meta{font-family:'Josefin Sans',sans-serif;font-size:.58rem;letter-spacing:1.5px;color:rgba(212,175,55,.6);text-transform:uppercase;margin-top:-4px}
+#mfv-bk-popup-input{background:rgba(28,20,5,.9);border:1px solid rgba(212,175,55,.3);border-radius:10px;padding:10px 13px;color:#f0e8cc;font-family:'Josefin Sans',sans-serif;font-size:.8rem;-webkit-user-select:text;user-select:text;width:100%;transition:border-color .2s}
+#mfv-bk-popup-input:focus{outline:none;border-color:var(--gold)}
+#mfv-bk-popup-input::placeholder{color:rgba(212,175,55,.28)}
+#mfv-bk-popup-btns{display:flex;gap:8px}
+.mfv-bk-popup-btn{flex:1;padding:10px;border-radius:9px;font-family:'Josefin Sans',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:1px;cursor:pointer;transition:all .2s;text-align:center}
+.mfv-bk-popup-btn.save{background:var(--gold);border:none;color:#000}
+.mfv-bk-popup-btn.save:hover{background:var(--gold-light)}
+.mfv-bk-popup-btn.cancel{background:transparent;border:1px solid rgba(212,175,55,.3);color:rgba(212,175,55,.7)}
+.mfv-bk-popup-btn.cancel:hover{border-color:var(--gold);color:var(--gold)}
+.mfv-bk-popup-btn.delete{background:transparent;border:1px solid rgba(220,50,50,.35);color:rgba(220,80,80,.8)}
+.mfv-bk-popup-btn.delete:hover{border-color:var(--danger);color:var(--danger)}
 
 /* Mushaf card hover effect (inline style card) */
 #mushaf-flipbook-card:hover{border-color:var(--gold)!important;transform:translateY(-2px)!important;box-shadow:0 10px 36px rgba(212,175,55,.18)!important}
@@ -1528,8 +1577,10 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
   </div>
 </div>
 
-<!-- MUSHAF FLIPBOOK VIEWER -->
+<!-- MUSHAF FLIPBOOK VIEWER — FULL SCREEN -->
 <div id="mushaf-flipbook-viewer">
+
+  <!-- Floating top bar -->
   <div id="mfv-header">
     <button class="mfv-hdr-btn" id="mfv-close-btn" aria-label="Close">
       <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
@@ -1538,32 +1589,34 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
       <div id="mfv-viewer-title">المصحف الشريف</div>
       <div id="mfv-viewer-sub">IndoPak 15-Line · Nastaleeq</div>
     </div>
-    <button id="mfv-search-btn" aria-label="Search Surah">
-      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="m21 21-4.35-4.35"/></svg>
+    <button id="mfv-search-btn" class="mfv-hdr-btn" aria-label="Search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6"/><path d="m21 21-4.35-4.35"/></svg>
     </button>
     <button class="mfv-hdr-btn" id="mfv-bk-btn" aria-label="Bookmark page">
       <svg viewBox="0 0 24 24"><path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2zm0 15l-5-2.18L7 18V5h10v13z"/></svg>
     </button>
   </div>
 
-  <!-- Surah search overlay -->
-  <div id="mfv-surah-search">
-    <input type="text" id="mfv-surah-input" placeholder="Search surah name or number…" autocomplete="off">
-    <div id="mfv-surah-results"></div>
-  </div>
-
+  <!-- True full-screen stage — PDF fills everything -->
   <div id="mfv-stage">
+    <!-- Page flash overlay (visible turn feedback) -->
+    <div id="mfv-page-flash"></div>
+
+    <!-- Load screen -->
     <div id="mfv-load-screen">
       <div class="mfv-load-ar">بِسْمِ اللَّهِ</div>
       <div class="mfv-load-track"><div class="mfv-load-bar" id="mfv-load-bar"></div></div>
       <div class="mfv-load-lbl" id="mfv-load-lbl">Loading Mushaf…</div>
     </div>
+    <!-- Error screen -->
     <div id="mfv-error-screen">
       <div class="mfv-err-icon">📖</div>
       <div class="mfv-err-title">Mushaf unavailable</div>
-      <div class="mfv-err-msg" id="mfv-err-msg">The PDF could not be loaded. Please ensure Quran_compressed.pdf is in the same folder as this HTML file and is served via HTTP (not file://).</div>
+      <div class="mfv-err-msg" id="mfv-err-msg">The PDF could not be loaded. Ensure Quran_compressed.pdf is in the same folder as this HTML file and served via HTTP.</div>
       <button class="mfv-err-btn" onclick="MushafFlipbook.retryLoad()">Try Again</button>
     </div>
+
+    <!-- Book pages -->
     <div id="mfv-book">
       <div class="mfv-page mfv-page-left" id="mfv-left-panel">
         <div class="mfv-pg-loader" id="mfv-left-loader"><div class="mfv-pg-spinner"></div><div class="mfv-pg-lbl">Loading…</div></div>
@@ -1576,13 +1629,43 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
         <canvas id="mfv-canvas-right"></canvas>
         <div class="mfv-pg-num" id="mfv-right-num"></div>
       </div>
+      <!-- Turn animation layer -->
       <div id="mfv-turn-pg">
         <canvas id="mfv-canvas-turn"></canvas>
       </div>
     </div>
-    <div id="mfv-swipe-hint">← Swipe to turn pages →</div>
+
+    <div id="mfv-swipe-hint">← Swipe to turn · اسحب للتقليب →</div>
+
+    <!-- Search overlay (full screen inside stage) -->
+    <div id="mfv-surah-search">
+      <div id="mfv-ss-hdr">
+        <button id="mfv-ss-close" onclick="MushafFlipbook._closeSurahSearch()">
+          <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        </button>
+        <input type="text" id="mfv-surah-input" placeholder="Search surah or para/juz…" autocomplete="off">
+      </div>
+      <div id="mfv-ss-tabs">
+        <button class="mfv-ss-tab active" data-sstab="surahs">Surahs</button>
+        <button class="mfv-ss-tab" data-sstab="juz">Juz / Para</button>
+      </div>
+      <div id="mfv-surah-results"></div>
+    </div>
+
+    <!-- Bookmark naming popup -->
+    <div id="mfv-bk-popup">
+      <div id="mfv-bk-popup-title">Bookmark Page</div>
+      <div id="mfv-bk-popup-meta"></div>
+      <input type="text" id="mfv-bk-popup-input" placeholder="Optional name (e.g. My favourite page)" maxlength="60" autocomplete="off">
+      <div id="mfv-bk-popup-btns">
+        <button class="mfv-bk-popup-btn cancel" onclick="MushafFlipbook._closeBkPopup()">Cancel</button>
+        <button class="mfv-bk-popup-btn delete" id="mfv-bk-delete-btn" style="display:none" onclick="MushafFlipbook._deleteBookmark()">Remove</button>
+        <button class="mfv-bk-popup-btn save" onclick="MushafFlipbook._saveBookmark()">Save</button>
+      </div>
+    </div>
   </div>
 
+  <!-- Floating bottom bar -->
   <div id="mfv-footer">
     <button class="mfv-nav-btn" id="mfv-fwd-btn" disabled>&#8592; Next</button>
     <div id="mfv-page-info">Page — / 604</div>
@@ -4037,10 +4120,35 @@ const MushafFlipbook = {
   renderTasks: {},
   _tx: 0, _ty: 0, _tt: 0,
   _barsVisible: true,
+  _ssTab: 'surahs',
+  _pinchStartDist: 0,
+  _pinchScale: 1,
+  _currentScale: 1,
+
+  /* ── Juz pages in this PDF ── */
+  JUZ_PAGES: {1:2,2:29,3:57,4:85,5:113,6:141,7:169,8:197,9:225,10:253,11:281,12:309,13:337,14:365,15:393,16:421,17:449,18:477,19:505,20:533,21:559,22:587,23:613,24:641,25:667,26:697,27:727,28:757,29:787,30:819},
 
   SURAH_PAGES: {1:2,2:3,3:68,4:106,5:147,6:177,7:209,8:246,9:260,10:288,11:308,12:328,13:346,14:355,15:364,16:372,17:393,18:408,19:425,20:435,21:449,22:462,23:477,24:487,25:501,26:511,27:525,28:535,29:552,30:562,31:571,32:577,33:581,34:595,35:603,36:611,37:618,38:628,39:635,40:647,41:659,42:668,43:677,44:686,45:691,46:697,47:704,48:710,49:717,50:721,51:725,52:729,53:732,54:737,55:740,56:745,57:750,58:757,59:761,60:766,61:770,62:773,63:775,64:777,65:780,66:783,67:787,68:790,69:794,70:797,71:800,72:803,73:806,74:808,75:811,76:813,77:816,78:819,79:820,80:822,81:823,82:825,83:826,84:828,85:829,86:830,87:831,88:832,89:833,90:835,91:836,92:837,93:838,94:838,95:839,96:839,97:840,98:840,99:841,100:842,101:843,102:843,103:844,104:844,105:845,106:845,107:845,108:846,109:846,110:846,111:847,112:847,113:847,114:848},
 
   SURAH_NAMES: {1:'Al-Fatihah',2:'Al-Baqarah',3:'Al-Imran',4:'An-Nisa',5:'Al-Maidah',6:'Al-Anam',7:'Al-Araf',8:'Al-Anfal',9:'At-Tawbah',10:'Yunus',11:'Hud',12:'Yusuf',13:'Ar-Rad',14:'Ibrahim',15:'Al-Hijr',16:'An-Nahl',17:'Bani Israil',18:'Al-Kahf',19:'Maryam',20:'Ta-Ha',21:'Al-Anbiya',22:'Al-Hajj',23:'Al-Muminun',24:'An-Nur',25:'Al-Furqan',26:'Ash-Shuara',27:'An-Naml',28:'Al-Qasas',29:'Al-Ankabut',30:'Ar-Rum',31:'Luqman',32:'As-Sajdah',33:'Al-Ahzab',34:'Saba',35:'Fatir',36:'Yasin',37:'As-Saffat',38:'Sad',39:'Az-Zumar',40:'Al-Mumin',41:'Ha-Mim As-Sajdah',42:'Ash-Shura',43:'Az-Zukhruf',44:'Ad-Dukhan',45:'Al-Jathiyah',46:'Al-Ahqaf',47:'Muhammad',48:'Al-Fath',49:'Al-Hujurat',50:'Qaf',51:'Adh-Dhariyat',52:'At-Tur',53:'An-Najm',54:'Al-Qamar',55:'Ar-Rahman',56:'Al-Waqiah',57:'Al-Hadid',58:'Al-Mujadilah',59:'Al-Hashr',60:'Al-Mumtahanah',61:'As-Saff',62:'Al-Jumuah',63:'Al-Munafiqun',64:'At-Taghabun',65:'At-Talaq',66:'At-Tahrim',67:'Al-Mulk',68:'Al-Qalam',69:'Al-Haqqah',70:'Al-Maarij',71:'Nuh',72:'Al-Jinn',73:'Al-Muzzammil',74:'Al-Muddathir',75:'Al-Qiyamah',76:'Ad-Dahr',77:'Al-Mursalat',78:'An-Naba',79:'An-Naziat',80:'Abasa',81:'At-Takwir',82:'Al-Infitar',83:'Al-Mutaffifin',84:'Al-Inshiqaq',85:'Al-Buruj',86:'At-Tariq',87:'Al-Ala',88:'Al-Ghashiyah',89:'Al-Fajr',90:'Al-Balad',91:'Ash-Shams',92:'Al-Layl',93:'Ad-Duha',94:'Ash-Sharh',95:'At-Tin',96:'Al-Alaq',97:'Al-Qadr',98:'Al-Bayyinah',99:'Az-Zalzalah',100:'Al-Adiyat',101:'Al-Qariah',102:'At-Takathur',103:'Al-Asr',104:'Al-Humazah',105:'Al-Fil',106:'Quraysh',107:'Al-Maun',108:'Al-Kawthar',109:'Al-Kafirun',110:'An-Nasr',111:'Al-Lahab',112:'Al-Ikhlas',113:'Al-Falaq',114:'An-Nas'},
+
+  /* ── Derive which surah & juz a page belongs to ── */
+  _pageToSurah(page) {
+    let surah = 1;
+    for (let s = 1; s <= 114; s++) { if (this.SURAH_PAGES[s] <= page) surah = s; else break; }
+    return surah;
+  },
+  _pageToJuz(page) {
+    let juz = 1;
+    for (let j = 1; j <= 30; j++) { if (this.JUZ_PAGES[j] <= page) juz = j; else break; }
+    return juz;
+  },
+  _pageContextLabel(page) {
+    const juz   = this._pageToJuz(page);
+    const surah = this._pageToSurah(page);
+    const sName = this.SURAH_NAMES[surah] || '';
+    return `Juz ${juz} · ${sName} (${surah}) · Page ${page}`;
+  },
 
   init() {
     try { const s = SafeStorage.get('mfv_bk_'+DEVICE_ID); if (s) this.bookmarks = JSON.parse(s); } catch(e) {}
@@ -4053,100 +4161,412 @@ const MushafFlipbook = {
     document.getElementById('mfv-close-btn').addEventListener('click', () => this.close());
     document.getElementById('mfv-fwd-btn').addEventListener('click',  () => this.goForward());
     document.getElementById('mfv-back-btn').addEventListener('click', () => this.goBackward());
-    document.getElementById('mfv-bk-btn').addEventListener('click',   () => this.toggleBookmark());
+    document.getElementById('mfv-bk-btn').addEventListener('click',   () => this._openBkPopup());
 
-    // Tap stage to toggle bars (hide/show header+footer)
+    /* Tap stage to toggle floating bars */
     const stage = document.getElementById('mfv-stage');
     stage.addEventListener('click', e => {
-      if(e.target.closest('.mfv-nav-btn,.mfv-hdr-btn,#mfv-search-btn,#mfv-surah-search,#mfv-load-screen,#mfv-error-screen,.mfv-err-btn'))return;
+      if (e.target.closest('#mfv-surah-search,#mfv-bk-popup,#mfv-load-screen,#mfv-error-screen,.mfv-err-btn,.mfv-hdr-btn,#mfv-search-btn,.mfv-nav-btn')) return;
       this._toggleBars();
     });
 
-    // Search button
+    /* Search button */
     document.getElementById('mfv-search-btn').addEventListener('click', e => {
       e.stopPropagation();
-      const ss=document.getElementById('mfv-surah-search');
-      const isOpen=ss.classList.contains('mfv-ss-open');
-      if(isOpen){ss.classList.remove('mfv-ss-open');document.getElementById('mfv-surah-results').innerHTML='';}
-      else{ss.classList.add('mfv-ss-open');setTimeout(()=>document.getElementById('mfv-surah-input').focus(),150);}
+      const ss = document.getElementById('mfv-surah-search');
+      if (ss.classList.contains('mfv-ss-open')) { this._closeSurahSearch(); }
+      else { ss.classList.add('mfv-ss-open'); this._renderSearchResults(''); setTimeout(() => document.getElementById('mfv-surah-input').focus(), 150); }
     });
-    document.getElementById('mfv-surah-input').addEventListener('input', e => {
-      e.stopPropagation();
-      this._doSurahSearch(e.target.value);
-    });
+    document.getElementById('mfv-surah-input').addEventListener('input', e => { e.stopPropagation(); this._renderSearchResults(e.target.value); });
     document.getElementById('mfv-surah-input').addEventListener('click', e => e.stopPropagation());
 
-    stage.addEventListener('touchstart', e => { const t=e.changedTouches[0]; this._tx=t.clientX; this._ty=t.clientY; this._tt=Date.now(); }, {passive:true});
+    /* Search tabs */
+    document.querySelectorAll('.mfv-ss-tab').forEach(tab => {
+      tab.addEventListener('click', e => {
+        e.stopPropagation();
+        document.querySelectorAll('.mfv-ss-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        this._ssTab = tab.dataset.sstab;
+        this._renderSearchResults(document.getElementById('mfv-surah-input').value);
+      });
+    });
+
+    /* Swipe */
+    stage.addEventListener('touchstart', e => {
+      if (e.touches.length === 2) { this._pinchStartDist = Math.hypot(e.touches[1].clientX - e.touches[0].clientX, e.touches[1].clientY - e.touches[0].clientY); return; }
+      const t = e.changedTouches[0]; this._tx = t.clientX; this._ty = t.clientY; this._tt = Date.now();
+    }, {passive: true});
+    stage.addEventListener('touchmove', e => {
+      if (e.touches.length === 2) {
+        /* Pinch-zoom: only scale the book, not the whole app */
+        e.stopPropagation();
+        const dist = Math.hypot(e.touches[1].clientX - e.touches[0].clientX, e.touches[1].clientY - e.touches[0].clientY);
+        const ratio = dist / (this._pinchStartDist || dist);
+        const newScale = Math.min(3, Math.max(1, this._currentScale * ratio));
+        document.getElementById('mfv-book').style.transform = `scale(${newScale})`;
+        this._pinchScale = newScale;
+      }
+    }, {passive: true});
     stage.addEventListener('touchend', e => {
-      const t=e.changedTouches[0];
-      const dx=t.clientX-this._tx, dy=t.clientY-this._ty, dt=Date.now()-this._tt;
-      if (Math.abs(dy) > Math.abs(dx)*1.2 || Math.abs(dx) < 38) return;
-      if ((Math.abs(dx)/dt) < 0.12 && Math.abs(dx) < 70) return;
+      if (e.touches.length === 0 && this._pinchScale !== this._currentScale) {
+        this._currentScale = this._pinchScale;
+        if (this._currentScale <= 1.05) { this._currentScale = 1; document.getElementById('mfv-book').style.transform = ''; }
+        return;
+      }
+      const t = e.changedTouches[0];
+      const dx = t.clientX - this._tx, dy = t.clientY - this._ty, dt = Date.now() - this._tt;
+      if (Math.abs(dy) > Math.abs(dx) * 1.2 || Math.abs(dx) < 38) return;
+      if ((Math.abs(dx) / dt) < 0.12 && Math.abs(dx) < 70) return;
       if (dx > 0) this.goForward(); else this.goBackward();
-    }, {passive:true});
+    }, {passive: true});
+
+    /* Keyboard */
     document.addEventListener('keydown', e => {
       if (!document.getElementById('mushaf-flipbook-viewer').classList.contains('mfv-open')) return;
       if (e.key === 'ArrowRight') this.goForward();
       if (e.key === 'ArrowLeft')  this.goBackward();
-      if (e.key === 'Escape')     this.close();
+      if (e.key === 'Escape') {
+        if (document.getElementById('mfv-surah-search').classList.contains('mfv-ss-open')) { this._closeSurahSearch(); return; }
+        if (document.getElementById('mfv-bk-popup').classList.contains('open')) { this._closeBkPopup(); return; }
+        this.close();
+      }
     });
   },
 
-  _toggleBars(){
-    this._barsVisible=!this._barsVisible;
-    const hdr=document.getElementById('mfv-header');
-    const ftr=document.getElementById('mfv-footer');
-    const tr='transform 0.35s cubic-bezier(0.4,0,0.2,1)';
-    hdr.style.transition=tr;ftr.style.transition=tr;
-    hdr.style.transform=this._barsVisible?'translateY(0)':'translateY(-100%)';
-    ftr.style.transform=this._barsVisible?'translateY(0)':'translateY(100%)';
+  _closeSurahSearch() {
+    document.getElementById('mfv-surah-search').classList.remove('mfv-ss-open');
+    document.getElementById('mfv-surah-input').value = '';
+    document.getElementById('mfv-surah-results').innerHTML = '';
   },
 
-  _searchSurah(query){
-    const q=query.toLowerCase().replace(/[^a-z0-9]/g,'').trim();
-    if(!q)return[];
-    const results=[];
-    for(let num=1;num<=114;num++){
-      const name=this.SURAH_NAMES[num].toLowerCase();
-      const clean=name.replace(/[^a-z]/g,'');
-      const numStr=String(num);
-      let score=0;
-      if(numStr===q)score=1.0;
-      else if(clean===q)score=0.99;
-      else if(clean.startsWith(q))score=0.95;
-      else if(clean.includes(q))score=0.85;
-      else{
-        const jw=Fuzzy.jw(q,clean.substring(0,q.length+4));
-        if(jw>0.7)score=jw;
-      }
-      if(score>0.45)results.push({num,name:this.SURAH_NAMES[num],page:this.SURAH_PAGES[num],score});
+  _toggleBars() {
+    this._barsVisible = !this._barsVisible;
+    const hdr = document.getElementById('mfv-header');
+    const ftr = document.getElementById('mfv-footer');
+    hdr.classList.toggle('mfv-bars-hidden', !this._barsVisible);
+    ftr.classList.toggle('mfv-bars-hidden', !this._barsVisible);
+  },
+
+  /* ── SEARCH ── */
+  _renderSearchResults(query) {
+    const wrap = document.getElementById('mfv-surah-results');
+    const q = (query || '').trim();
+    if (this._ssTab === 'juz') { this._renderJuzResults(q, wrap); return; }
+    this._renderSurahResults(q, wrap);
+  },
+
+  _renderSurahResults(q, wrap) {
+    let html = '<div class="mfv-ss-section">Surahs · 114</div>';
+    const results = [];
+    for (let num = 1; num <= 114; num++) {
+      const name = this.SURAH_NAMES[num];
+      const page = this.SURAH_PAGES[num];
+      const juz  = this._pageToJuz(page);
+      if (!q) { results.push({num, name, page, juz, score: 1}); continue; }
+      const clean = name.toLowerCase().replace(/[^a-z0-9]/g, '');
+      const qc    = q.toLowerCase().replace(/[^a-z0-9]/g, '');
+      const numQ  = parseInt(q);
+      let score = 0;
+      if (!isNaN(numQ) && numQ === num) score = 1.0;
+      else if (clean === qc) score = 0.99;
+      else if (clean.startsWith(qc)) score = 0.95;
+      else if (clean.includes(qc)) score = 0.85;
+      else { const jw = Fuzzy.jw(qc, clean.substring(0, qc.length + 4)); if (jw > 0.7) score = jw; }
+      if (score > 0.45) results.push({num, name, page, juz, score});
     }
-    return results.sort((a,b)=>b.score-a.score).slice(0,8);
+    if (q) results.sort((a, b) => b.score - a.score).splice(12);
+    if (!results.length) { wrap.innerHTML = '<div style="text-align:center;padding:30px;color:rgba(212,175,55,.45);font-family:Josefin Sans,sans-serif;font-size:.75rem">No surahs found</div>'; return; }
+    html += results.map(r => `
+      <div class="mfv-ss-item" onclick="MushafFlipbook._goToPage(${r.page})">
+        <div class="mfv-ss-num">${r.num}</div>
+        <div class="mfv-ss-name">${r.name}</div>
+        <div class="mfv-ss-page">Juz ${r.juz} · Pg ${r.page}</div>
+      </div>`).join('');
+    wrap.innerHTML = html;
   },
 
-  _doSurahSearch(query){
-    const wrap=document.getElementById('mfv-surah-results');
-    if(!query.trim()){wrap.innerHTML='';return;}
-    const results=this._searchSurah(query);
-    if(!results.length){wrap.innerHTML='<div class="mfv-ss-item" style="justify-content:center;color:var(--text-dim)">No results</div>';return;}
-    wrap.innerHTML=results.map(r=>`<div class="mfv-ss-item" onclick="MushafFlipbook._goToSurahPage(${r.num})">
-      <div class="mfv-ss-num">${r.num}</div>
-      <div class="mfv-ss-name">${r.name}</div>
-      <div class="mfv-ss-page">Page ${r.page}</div>
-    </div>`).join('');
+  _renderJuzResults(q, wrap) {
+    let html = '<div class="mfv-ss-section">Juz / Para · 30</div>';
+    const num = parseInt(q);
+    const highlightJuz = (!isNaN(num) && num >= 1 && num <= 30) ? num : null;
+    if (highlightJuz) {
+      const page = this.JUZ_PAGES[highlightJuz];
+      const surah = this._pageToSurah(page);
+      html = `<div class="mfv-ss-section">Jump to Juz</div>
+        <div class="mfv-ss-item" style="background:rgba(212,175,55,.12);border-radius:10px;margin:8px 10px" onclick="MushafFlipbook._goToPage(${page})">
+          <div class="mfv-ss-juz-badge"><div class="mfv-ss-juz-n">${highlightJuz}</div></div>
+          <div class="mfv-ss-name" style="font-size:.88rem">Juz ${highlightJuz} · الجزء ${JUZ_AR_NAMES[highlightJuz-1]||''}</div>
+          <div class="mfv-ss-page">Pg ${page}</div>
+        </div>` + '<div class="mfv-ss-section">All Juz</div>';
+    }
+    for (let j = 1; j <= 30; j++) {
+      const page  = this.JUZ_PAGES[j];
+      const surah = this._pageToSurah(page);
+      const sName = this.SURAH_NAMES[surah] || '';
+      const hl    = j === highlightJuz ? ' style="background:rgba(212,175,55,.08)"' : '';
+      html += `<div class="mfv-ss-item"${hl} onclick="MushafFlipbook._goToPage(${page})">
+        <div class="mfv-ss-juz-badge"><div class="mfv-ss-juz-n">${j}</div></div>
+        <div class="mfv-ss-name">Juz ${j} · ${sName}</div>
+        <div class="mfv-ss-page">Pg ${page}</div>
+      </div>`;
+    }
+    wrap.innerHTML = html;
   },
 
-  _goToSurahPage(surahNum){
-    const page=this.SURAH_PAGES[surahNum];
-    if(!page)return;
-    this.spread=this._pageToSpread(page);
+  _goToPage(page) {
+    if (!page || page < 1 || page > this.totalPages) return;
+    this.spread = this._pageToSpread(page);
     this._renderSpread();
     this._updateFooter();
     this._updateBkBtn();
-    document.getElementById('mfv-surah-search').classList.remove('mfv-ss-open');
-    document.getElementById('mfv-surah-input').value='';
-    document.getElementById('mfv-surah-results').innerHTML='';
-    if(typeof App!=='undefined')App.toast('Jumped to '+this.SURAH_NAMES[surahNum]+' · Page '+page);
+    this._closeSurahSearch();
+    const ctx = this._pageContextLabel(page);
+    if (typeof App !== 'undefined') App.toast('↗ ' + ctx);
+  },
+
+  _goToSurahPage(surahNum) { this._goToPage(this.SURAH_PAGES[surahNum]); },
+
+  /* ── BOOKMARK POPUP ── */
+  _openBkPopup() {
+    const page = this._currentPage();
+    const key  = String(page);
+    const ctx  = this._pageContextLabel(page);
+    const popup = document.getElementById('mfv-bk-popup');
+    document.getElementById('mfv-bk-popup-title').textContent = this.bookmarks[key] ? 'Edit Bookmark' : 'Bookmark Page';
+    document.getElementById('mfv-bk-popup-meta').textContent  = ctx;
+    document.getElementById('mfv-bk-popup-input').value = this.bookmarks[key]?.name || '';
+    document.getElementById('mfv-bk-delete-btn').style.display = this.bookmarks[key] ? 'block' : 'none';
+    /* Position near top-right (below the header buttons) */
+    popup.style.top   = 'calc(var(--safe-top) + 62px)';
+    popup.style.right = '14px';
+    popup.classList.add('open');
+    setTimeout(() => document.getElementById('mfv-bk-popup-input').focus(), 150);
+  },
+  _closeBkPopup() {
+    document.getElementById('mfv-bk-popup').classList.remove('open');
+  },
+  _saveBookmark() {
+    const page = this._currentPage();
+    const key  = String(page);
+    const name = (document.getElementById('mfv-bk-popup-input').value || '').trim();
+    const juz  = this._pageToJuz(page);
+    const surah= this._pageToSurah(page);
+    const sName= this.SURAH_NAMES[surah] || '';
+    this.bookmarks[key] = { page, spread: this.spread, addedAt: Date.now(), name: name||null, juz, surah, surahName: sName };
+    try { SafeStorage.set('mfv_bk_'+DEVICE_ID, JSON.stringify(this.bookmarks)); } catch(e) {}
+    this._updateBkBtn();
+    this._refreshHomeRibbon();
+    this._refreshHomeBkCards();
+    this._closeBkPopup();
+    if (typeof App !== 'undefined') App.toast('✦ Bookmarked · ' + this._pageContextLabel(page));
+  },
+  _deleteBookmark() {
+    const page = this._currentPage();
+    const key  = String(page);
+    delete this.bookmarks[key];
+    try { SafeStorage.set('mfv_bk_'+DEVICE_ID, JSON.stringify(this.bookmarks)); } catch(e) {}
+    this._updateBkBtn();
+    this._refreshHomeRibbon();
+    this._refreshHomeBkCards();
+    this._closeBkPopup();
+    if (typeof App !== 'undefined') App.toast('Bookmark removed · Page ' + page, 'info');
+  },
+  toggleBookmark() { this._openBkPopup(); },
+
+  _updateBkBtn() {
+    const btn = document.getElementById('mfv-bk-btn');
+    if (!btn) return;
+    if (this.bookmarks[String(this._currentPage())]) btn.classList.add('bookmarked');
+    else btn.classList.remove('bookmarked');
+  },
+
+  /* ── LAYOUT ── */
+  _isMobile()     { return window.innerWidth <= 600; },
+  _pageToSpread(p){ if (this._isMobile()) return Math.max(0, p-1); if (p <= 1) return 0; return Math.floor((p-2)/2)+1; },
+  _leftPage(s)    { if (s === 0) return 1; return (s-1)*2+2; },
+  _rightPage(s)   { if (s === 0) return 2; return (s-1)*2+3; },
+  _totalSpreads() { if (this._isMobile()) return this.totalPages; return Math.ceil((this.totalPages-1)/2)+1; },
+
+  _renderSpread() {
+    const s = this.spread, mobile = this._isMobile();
+    if (mobile) {
+      const p = Math.min(s+1, this.totalPages);
+      this._renderPage(p, 'mfv-canvas-right', 'mfv-right-loader');
+      document.getElementById('mfv-right-num').textContent = 'Page ' + p;
+    } else if (s === 0) {
+      this._renderPage(1, 'mfv-canvas-right', 'mfv-right-loader');
+      document.getElementById('mfv-right-num').textContent = 'Page 1';
+      const lc = document.getElementById('mfv-canvas-left');
+      lc.getContext('2d').clearRect(0,0,lc.width||1,lc.height||1);
+      document.getElementById('mfv-left-loader').style.display = 'none';
+      document.getElementById('mfv-left-num').textContent = '';
+    } else {
+      const lp = this._leftPage(s), rp = this._rightPage(s);
+      this._renderPage(lp, 'mfv-canvas-left', 'mfv-left-loader');
+      document.getElementById('mfv-left-num').textContent = 'Page ' + lp;
+      if (rp <= this.totalPages) {
+        this._renderPage(rp, 'mfv-canvas-right', 'mfv-right-loader');
+        document.getElementById('mfv-right-num').textContent = 'Page ' + rp;
+      } else {
+        const rc = document.getElementById('mfv-canvas-right');
+        rc.getContext('2d').clearRect(0,0,rc.width,rc.height);
+        document.getElementById('mfv-right-loader').style.display = 'none';
+        document.getElementById('mfv-right-num').textContent = '';
+      }
+    }
+    this._updateFooter(); this._updateBkBtn();
+  },
+
+  async _renderPage(pageNum, canvasId, loaderId) {
+    if (!this.pdfDoc || pageNum < 1 || pageNum > this.totalPages) { document.getElementById(loaderId).style.display='none'; return; }
+    document.getElementById(loaderId).style.display = 'flex';
+    if (this.renderTasks[canvasId]) { try { this.renderTasks[canvasId].cancel(); } catch(e) {} }
+    try {
+      const page = await this.pdfDoc.getPage(pageNum);
+      const canvas    = document.getElementById(canvasId);
+      const container = canvas.parentElement;
+      const cw = container.clientWidth  || window.innerWidth  / (this._isMobile() ? 1 : 2);
+      const ch = container.clientHeight || window.innerHeight;
+      const vp0   = page.getViewport({scale: 1});
+      const dpr   = window.devicePixelRatio || 1;
+      const scale = Math.min(cw / vp0.width, ch / vp0.height) * dpr;
+      const vp    = page.getViewport({scale});
+      canvas.width  = vp.width;
+      canvas.height = vp.height;
+      canvas.style.width  = (vp.width  / dpr) + 'px';
+      canvas.style.height = (vp.height / dpr) + 'px';
+      const task = page.render({canvasContext: canvas.getContext('2d'), viewport: vp});
+      this.renderTasks[canvasId] = task;
+      await task.promise;
+      document.getElementById(loaderId).style.display = 'none';
+    } catch(e) {
+      if (e && e.name !== 'RenderingCancelledException') { console.warn('[Mushaf] render p'+pageNum, e); document.getElementById(loaderId).style.display='none'; }
+    }
+  },
+
+  async _animateTurn(dir) {
+    if (this.animating) return;
+    this.animating = true;
+
+    const tp  = document.getElementById('mfv-turn-pg');
+    const tc  = document.getElementById('mfv-canvas-turn');
+    const src = document.getElementById(dir === 'fwd' ? 'mfv-canvas-right' : 'mfv-canvas-left');
+
+    /* Copy current visible page onto turn canvas */
+    if (src && src.width > 0) {
+      tc.width = src.width; tc.height = src.height;
+      tc.style.width = src.style.width; tc.style.height = src.style.height;
+      tc.getContext('2d').drawImage(src, 0, 0);
+    }
+
+    tp.className = '';
+    tp.classList.add(dir === 'fwd' ? 'tp-fwd' : 'tp-back');
+    tp.style.display = 'block';
+
+    /* Advance spread BEFORE animation renders new content under the flipping page */
+    if (dir === 'fwd') this.spread++; else this.spread--;
+    this._renderSpread();
+    this._updateFooter();
+    this._updateBkBtn();
+
+    /* Trigger animation on next frame */
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      tp.classList.add(dir === 'fwd' ? 'anim-fwd' : 'anim-back');
+    }));
+
+    /* Flash so user sees the turn happened clearly */
+    const flash = document.getElementById('mfv-page-flash');
+    flash.classList.remove('flash');
+    requestAnimationFrame(() => requestAnimationFrame(() => flash.classList.add('flash')));
+
+    await new Promise(r => setTimeout(r, 750));
+    tp.className = '';
+    tp.style.display = 'none';
+    flash.classList.remove('flash');
+    this.animating = false;
+    this._preload();
+  },
+
+  goForward()  { if (!this.animating && this.spread < this._totalSpreads()-1) this._animateTurn('fwd'); },
+  goBackward() { if (!this.animating && this.spread > 0) this._animateTurn('back'); },
+
+  _preload() {
+    if (!this.pdfDoc) return;
+    const mobile = this._isMobile();
+    [this.spread+1, this.spread-1].forEach(ns => {
+      if (ns < 0 || ns >= this._totalSpreads()) return;
+      if (mobile) { const p = Math.min(ns+1, this.totalPages); if (p >= 1) this.pdfDoc.getPage(p).catch(()=>{}); }
+      else {
+        this.pdfDoc.getPage(this._leftPage(ns)).catch(()=>{});
+        const rp = this._rightPage(ns); if (rp <= this.totalPages) this.pdfDoc.getPage(rp).catch(()=>{});
+      }
+    });
+  },
+
+  _updateFooter() {
+    const s = this.spread, total = this._totalSpreads(), mobile = this._isMobile();
+    let label, curP;
+    if (mobile) {
+      curP  = Math.min(s+1, this.totalPages);
+      label = 'Page ' + curP + ' / ' + this.totalPages;
+    } else if (s === 0) {
+      curP  = 1;
+      label = 'Page 1 / ' + this.totalPages;
+    } else {
+      const lp = this._leftPage(s), rp = this._rightPage(s);
+      curP  = lp;
+      label = 'Pages ' + lp + '\u2013' + Math.min(rp, this.totalPages) + ' / ' + this.totalPages;
+    }
+    document.getElementById('mfv-page-info').textContent = label;
+    /* Update floating title with juz+surah */
+    const juz   = this._pageToJuz(curP);
+    const surah = this._pageToSurah(curP);
+    const sName = this.SURAH_NAMES[surah] || '';
+    document.getElementById('mfv-viewer-sub').textContent = 'Juz ' + juz + ' · ' + sName + ' · Pg ' + curP;
+    document.getElementById('mfv-fwd-btn').disabled = (s >= total - 1);
+    document.getElementById('mfv-back-btn').disabled = (s <= 0);
+  },
+
+  _currentPage() { return this._isMobile() ? Math.min(this.spread+1, this.totalPages) : (this.spread === 0 ? 1 : this._leftPage(this.spread)); },
+
+  _refreshHomeRibbon() {
+    const ribbon = document.getElementById('mfv-home-ribbon');
+    if (!ribbon) return;
+    const keys = Object.keys(this.bookmarks);
+    if (!keys.length) { ribbon.style.display='none'; return; }
+    const latest = keys.sort((a,b) => (this.bookmarks[b].addedAt||0)-(this.bookmarks[a].addedAt||0))[0];
+    document.getElementById('mfv-ribbon-page').textContent = latest;
+    ribbon.style.display = 'flex';
+  },
+
+  _refreshHomeBkCards() {
+    const wrap = document.getElementById('home-mushaf-bk-wrap');
+    if (!wrap) return;
+    const keys = Object.keys(this.bookmarks);
+    if (!keys.length) { wrap.innerHTML = ''; return; }
+    const sorted = keys.map(k => this.bookmarks[k]).sort((a,b) => (b.addedAt||0)-(a.addedAt||0)).slice(0,3);
+    wrap.innerHTML = sorted.map(bk => {
+      const labelTop  = bk.name ? bk.name : ('Page ' + bk.page);
+      const labelMeta = `Juz ${bk.juz||'?'} · ${bk.surahName||''} · Page ${bk.page}`;
+      const dateStr   = new Date(bk.addedAt||Date.now()).toLocaleDateString('en-US',{month:'short',day:'numeric'});
+      return `<div onclick="MushafFlipbook.openFlipbook(${bk.page})" style="position:relative;border-radius:18px;border:1px dashed rgba(212,175,55,.32);background:linear-gradient(145deg,#0c0a05,#080602);padding:15px 16px 13px;cursor:pointer;overflow:hidden;transition:border-color .25s,transform .2s;-webkit-tap-highlight-color:transparent" onmouseover="this.style.borderColor='var(--gold)';this.style.transform='translateY(-1px)'" onmouseout="this.style.borderColor='rgba(212,175,55,.32)';this.style.transform=''">
+        <div style="display:flex;align-items:center;gap:14px;position:relative;z-index:1">
+          <div style="width:48px;height:56px;flex-shrink:0;background:linear-gradient(160deg,rgba(212,175,55,.12),rgba(212,175,55,.03));border:1px solid var(--gold-border);border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center">
+            <div style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:600;color:var(--gold);line-height:1">${bk.page}</div>
+            <div style="font-family:'Josefin Sans',sans-serif;font-size:.4rem;letter-spacing:1px;color:var(--text-dim);text-transform:uppercase;margin-top:2px">Page</div>
+          </div>
+          <div style="flex:1;min-width:0">
+            <div style="font-family:'Josefin Sans',sans-serif;font-size:.5rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold);opacity:.75;margin-bottom:3px">Mushaf Bookmark · علامة</div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:600;color:var(--text);line-height:1.2;margin-bottom:2px">${labelTop}</div>
+            <div style="font-family:'Josefin Sans',sans-serif;font-size:.56rem;letter-spacing:.5px;color:var(--text-dim)">${labelMeta}</div>
+            <div style="font-family:'Josefin Sans',sans-serif;font-size:.52rem;color:var(--text-ghost);margin-top:2px">Saved ${dateStr}</div>
+          </div>
+          <div style="width:30px;height:30px;border-radius:50%;background:var(--gold-soft);border:1px solid var(--gold-border);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="var(--gold)"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
   },
 
   promptOpenMode() {
@@ -4157,20 +4577,19 @@ const MushafFlipbook = {
     document.getElementById('mfv-mode-overlay').classList.remove('mfv-modal-open');
     document.getElementById('mfv-mode-modal').classList.remove('mfv-modal-open');
   },
-  _onOverlayClick(e) {
-    if (e.target === document.getElementById('mfv-mode-overlay')) this.closeModal();
-  },
+  _onOverlayClick(e) { if (e.target === document.getElementById('mfv-mode-overlay')) this.closeModal(); },
 
   openFlipbook(startPage) {
     this.closeModal();
     const v = document.getElementById('mushaf-flipbook-viewer');
     v.classList.add('mfv-open');
-    if(typeof App!=='undefined')App._pushState('mushaf');
+    if (typeof App !== 'undefined') App._pushState('mushaf');
     document.body.style.overflow = 'hidden';
+    document.body.style.touchAction = 'none';
     if (startPage) {
       this.spread = this._pageToSpread(startPage);
     } else {
-      try { const lp = SafeStorage.get('mfv_last_'+DEVICE_ID); if (lp) this.spread = this._pageToSpread(parseInt(lp,10)); } catch(e) {}
+      try { const lp = SafeStorage.get('mfv_last_'+DEVICE_ID); if (lp) this.spread = this._pageToSpread(parseInt(lp, 10)); } catch(e) {}
     }
     if (this.loaded) {
       document.getElementById('mfv-load-screen').classList.add('hidden');
@@ -4183,7 +4602,10 @@ const MushafFlipbook = {
   close() {
     document.getElementById('mushaf-flipbook-viewer').classList.remove('mfv-open');
     document.body.style.overflow = '';
-    try { SafeStorage.set('mfv_last_'+DEVICE_ID, String(this._leftPage(this.spread))); } catch(e) {}
+    document.body.style.touchAction = '';
+    this._closeSurahSearch();
+    this._closeBkPopup();
+    try { SafeStorage.set('mfv_last_'+DEVICE_ID, String(this._currentPage())); } catch(e) {}
   },
   closeFlipbook() { this.close(); },
 
@@ -4224,178 +4646,6 @@ const MushafFlipbook = {
   retryLoad() {
     document.getElementById('mfv-error-screen').classList.remove('visible');
     this.loaded=false; this.pdfDoc=null; this._loadPDFJs();
-  },
-
-  // Spread 0 = page 1 (cover, single)
-  // Spread 1 = pages 2,3 | Spread 2 = pages 4,5 | ...
-  // spread s>=1: leftPage = (s-1)*2+2, rightPage = (s-1)*2+3
-  // Spread math — desktop shows two pages side by side.
-  // spread 0 = page 1 (cover, right side only)
-  // spread 1 = pages 2+3, spread 2 = pages 4+5, etc.
-  // On mobile we show one page per spread, so spread = page - 1 (page 1→spread 0, page 2→spread 1, ...)
-  _isMobile()    { return window.innerWidth<=600; },
-  _pageToSpread(p){ if(this._isMobile()) return Math.max(0,p-1); if(p<=1)return 0; return Math.floor((p-2)/2)+1; },
-  _leftPage(s)   { if(s===0)return 1; return (s-1)*2+2; },
-  _rightPage(s)  { if(s===0)return 2; return (s-1)*2+3; },
-  _totalSpreads(){ if(this._isMobile()) return this.totalPages; return Math.ceil((this.totalPages-1)/2)+1; },
-
-  _renderSpread() {
-    const s=this.spread, mobile=this._isMobile();
-    if (mobile) {
-      // Mobile: one page per spread, page number = spread + 1
-      const p = Math.min(s+1, this.totalPages);
-      this._renderPage(p,'mfv-canvas-right','mfv-right-loader');
-      document.getElementById('mfv-right-num').textContent='Page '+p;
-    } else if (s===0) {
-      // Desktop cover: page 1 on right, blank left
-      this._renderPage(1,'mfv-canvas-right','mfv-right-loader');
-      document.getElementById('mfv-right-num').textContent='Page 1';
-      const lc=document.getElementById('mfv-canvas-left');
-      const lctx=lc.getContext('2d');lc.width=10;lc.height=10;lctx.clearRect(0,0,10,10);
-      document.getElementById('mfv-left-loader').style.display='none';
-      document.getElementById('mfv-left-num').textContent='';
-    } else {
-      // Desktop: two pages
-      const lp=this._leftPage(s), rp=this._rightPage(s);
-      this._renderPage(lp,'mfv-canvas-left','mfv-left-loader');
-      document.getElementById('mfv-left-num').textContent='Page '+lp;
-      if(rp<=this.totalPages){
-        this._renderPage(rp,'mfv-canvas-right','mfv-right-loader');
-        document.getElementById('mfv-right-num').textContent='Page '+rp;
-      } else {
-        const rc=document.getElementById('mfv-canvas-right');
-        rc.getContext('2d').clearRect(0,0,rc.width,rc.height);
-        document.getElementById('mfv-right-loader').style.display='none';
-        document.getElementById('mfv-right-num').textContent='';
-      }
-    }
-    this._updateFooter(); this._updateBkBtn();
-  },
-
-  async _renderPage(pageNum,canvasId,loaderId) {
-    if (!this.pdfDoc||pageNum<1||pageNum>this.totalPages){document.getElementById(loaderId).style.display='none';return;}
-    document.getElementById(loaderId).style.display='flex';
-    if (this.renderTasks[canvasId]){try{this.renderTasks[canvasId].cancel();}catch(e){}}
-    try {
-      const page=await this.pdfDoc.getPage(pageNum);
-      const canvas=document.getElementById(canvasId);
-      const container=canvas.parentElement;
-      const cw=container.clientWidth||400, ch=container.clientHeight||600;
-      const vp0=page.getViewport({scale:1});
-      const dpr=window.devicePixelRatio||1;
-      const scale=Math.min(cw/vp0.width,ch/vp0.height)*dpr;
-      const vp=page.getViewport({scale});
-      canvas.width=vp.width; canvas.height=vp.height;
-      canvas.style.width=(vp.width/dpr)+'px'; canvas.style.height=(vp.height/dpr)+'px';
-      const task=page.render({canvasContext:canvas.getContext('2d'),viewport:vp});
-      this.renderTasks[canvasId]=task;
-      await task.promise;
-      document.getElementById(loaderId).style.display='none';
-    } catch(e) {
-      if(e&&e.name!=='RenderingCancelledException'){console.warn('[Mushaf] render p'+pageNum,e);document.getElementById(loaderId).style.display='none';}
-    }
-  },
-
-  async _animateTurn(dir) {
-    if (this.animating) return;
-    this.animating=true;
-    const tp=document.getElementById('mfv-turn-pg'), tc=document.getElementById('mfv-canvas-turn');
-    const src=document.getElementById('mfv-canvas-right');
-    if (src.width>0) {
-      tc.width=src.width; tc.height=src.height;
-      tc.style.width=src.style.width; tc.style.height=src.style.height;
-      tc.getContext('2d').drawImage(src,0,0);
-    }
-    tp.className='';
-    tp.classList.add(dir==='fwd'?'tp-fwd':'tp-back');
-    if (dir==='fwd') this.spread++; else this.spread--;
-    this._renderSpread();
-    this._updateFooter();
-    this._updateBkBtn();
-    requestAnimationFrame(()=>requestAnimationFrame(()=>tp.classList.add(dir==='fwd'?'anim-fwd':'anim-back')));
-    await new Promise(r=>setTimeout(r,730));
-    tp.className=''; tp.style.display='none';
-    this.animating=false;
-    this._preload();
-  },
-
-  goForward()  { if(!this.animating&&this.spread<this._totalSpreads()-1) this._animateTurn('fwd'); },
-  goBackward() { if(!this.animating&&this.spread>0) this._animateTurn('back'); },
-
-  _preload() {
-    if(!this.pdfDoc)return;
-    const mobile=this._isMobile();
-    [this.spread+1,this.spread-1].forEach(ns=>{
-      if(ns<0||ns>=this._totalSpreads())return;
-      if(mobile){
-        const p=Math.min(ns+1,this.totalPages);
-        if(p>=1)this.pdfDoc.getPage(p).catch(()=>{});
-      } else {
-        this.pdfDoc.getPage(this._leftPage(ns)).catch(()=>{});
-        const rp=this._rightPage(ns);
-        if(rp<=this.totalPages)this.pdfDoc.getPage(rp).catch(()=>{});
-      }
-    });
-  },
-
-  _updateFooter() {
-    const s=this.spread,total=this._totalSpreads(),mobile=this._isMobile();
-    let label;
-    if(mobile){
-      const p=Math.min(s+1,this.totalPages);
-      label='Page '+p+' / '+this.totalPages;
-    } else if(s===0){
-      label='Page 1 / '+this.totalPages;
-    } else {
-      const lp=this._leftPage(s),rp=this._rightPage(s);
-      label='Pages '+lp+'\u2013'+Math.min(rp,this.totalPages)+' / '+this.totalPages;
-    }
-    document.getElementById('mfv-page-info').textContent=label;
-    const curP=mobile?Math.min(s+1,this.totalPages):(s===0?1:this._leftPage(s));
-    document.getElementById('mfv-viewer-sub').textContent='Page '+curP+' of '+this.totalPages;
-    document.getElementById('mfv-fwd-btn').disabled=(s>=total-1);
-    document.getElementById('mfv-back-btn').disabled=(s<=0);
-  },
-
-  _currentPage(){ return this._isMobile()?Math.min(this.spread+1,this.totalPages):(this.spread===0?1:this._leftPage(this.spread)); },
-
-  toggleBookmark() {
-    const page=this._currentPage(),key=String(page);
-    if(this.bookmarks[key]){
-      delete this.bookmarks[key];
-      if(typeof App!=='undefined')App.toast('Bookmark removed \u00b7 Page '+page,'info');
-    } else {
-      this.bookmarks[key]={page,spread:this.spread,addedAt:Date.now()};
-      if(typeof App!=='undefined')App.toast('Bookmarked \u00b7 Page '+page);
-    }
-    try{SafeStorage.set('mfv_bk_'+DEVICE_ID,JSON.stringify(this.bookmarks));}catch(e){}
-    this._updateBkBtn(); this._refreshHomeRibbon(); this._refreshHomeBkCards();
-  },
-
-  _updateBkBtn() {
-    const btn=document.getElementById('mfv-bk-btn');
-    if(!btn)return;
-    if(this.bookmarks[String(this._currentPage())])btn.classList.add('bookmarked');
-    else btn.classList.remove('bookmarked');
-  },
-
-  _refreshHomeRibbon() {
-    const ribbon=document.getElementById('mfv-home-ribbon');
-    if(!ribbon)return;
-    const keys=Object.keys(this.bookmarks);
-    if(!keys.length){ribbon.style.display='none';return;}
-    const latest=keys.sort((a,b)=>(this.bookmarks[b].addedAt||0)-(this.bookmarks[a].addedAt||0))[0];
-    document.getElementById('mfv-ribbon-page').textContent=latest;
-    ribbon.style.display='flex';
-  },
-
-  _refreshHomeBkCards() {
-    const wrap=document.getElementById('home-mushaf-bk-wrap');
-    if(!wrap)return;
-    const keys=Object.keys(this.bookmarks);
-    if(!keys.length){wrap.innerHTML='';return;}
-    const sorted=keys.map(k=>this.bookmarks[k]).sort((a,b)=>(b.addedAt||0)-(a.addedAt||0)).slice(0,3);
-    wrap.innerHTML=sorted.map(bk=>`<div onclick="MushafFlipbook.openFlipbook(${bk.page})" style="position:relative;border-radius:18px;border:1px dashed rgba(212,175,55,.32);background:linear-gradient(145deg,#0c0a05,#080602);padding:15px 16px 13px;cursor:pointer;overflow:hidden;transition:border-color .25s,transform .2s;-webkit-tap-highlight-color:transparent" onmouseover="this.style.borderColor='var(--gold)';this.style.transform='translateY(-1px)'" onmouseout="this.style.borderColor='rgba(212,175,55,.32)';this.style.transform=''"><div style="position:absolute;inset:0;pointer-events:none;background:url(\"data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23d4af37' fill-opacity='0.025'%3E%3Cpath d='M40 0L0 40 40 80 80 40z'/%3E%3C/g%3E%3C/svg%3E\")"></div><div style="display:flex;align-items:center;gap:14px;position:relative;z-index:1"><div style="width:48px;height:56px;flex-shrink:0;background:linear-gradient(160deg,rgba(212,175,55,.12),rgba(212,175,55,.03));border:1px solid var(--gold-border);border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center"><div style="font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:600;color:var(--gold);line-height:1">${bk.page}</div><div style="font-family:'Josefin Sans',sans-serif;font-size:.42rem;letter-spacing:1.5px;color:var(--text-dim);text-transform:uppercase;margin-top:2px">Page</div></div><div style="flex:1;min-width:0"><div style="font-family:'Josefin Sans',sans-serif;font-size:.5rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold);opacity:.75;margin-bottom:4px">Mushaf Bookmark \u00b7 \u0639\u0644\u0627\u0645\u0629</div><div style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;color:var(--text);line-height:1.2;margin-bottom:2px">Page ${bk.page}</div><div style="font-family:'Josefin Sans',sans-serif;font-size:.58rem;letter-spacing:.8px;color:var(--text-dim)">Saved ${new Date(bk.addedAt||Date.now()).toLocaleDateString('en-US',{month:'short',day:'numeric'})} \u00b7 Tap to continue</div></div><div style="width:30px;height:30px;border-radius:50%;background:var(--gold-soft);border:1px solid var(--gold-border);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" width="13" height="13" fill="var(--gold)"><path d="M8 5v14l11-7z"/></svg></div></div><div style="display:flex;gap:7px;margin-top:10px;position:relative;z-index:1"><span style="font-family:'Josefin Sans',sans-serif;font-size:.5rem;letter-spacing:1.8px;text-transform:uppercase;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-border);border-radius:100px;padding:3px 9px;display:inline-flex;align-items:center;gap:4px"><svg viewBox="0 0 24 24" width="9" height="9" fill="currentColor"><path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg>Bookmarked</span><span style="font-family:'Josefin Sans',sans-serif;font-size:.5rem;letter-spacing:1.8px;text-transform:uppercase;color:var(--text-dim);background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:100px;padding:3px 9px">IndoPak 15-Line</span></div></div>`).join('');
   }
 };
 
