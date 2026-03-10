@@ -809,34 +809,52 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 /* Spine — thin center line */
 #mfv-spine{position:absolute;left:50%;top:0;bottom:0;width:10px;transform:translateX(-50%);z-index:6;background:linear-gradient(90deg,rgba(0,0,0,.28) 0%,rgba(60,38,10,.18) 50%,rgba(0,0,0,.28) 100%);box-shadow:-1px 0 6px rgba(0,0,0,.35),1px 0 6px rgba(0,0,0,.35)}
 
-/* ── SMOOTH PAGE TURN — slide + fade ── */
-#mfv-turn-pg{position:absolute;top:0;bottom:0;z-index:30;pointer-events:none;display:none;will-change:transform,opacity;overflow:hidden}
-#mfv-turn-pg.tp-fwd{right:0;left:50%;background:#fdf9ee}
-#mfv-turn-pg.tp-back{left:0;right:50%;background:#fdf9ee}
-#mfv-turn-pg canvas{display:block;width:100%!important;height:100%!important;object-fit:fill;position:absolute;inset:0}
-#mfv-turn-pg::after{content:'';position:absolute;inset:0;z-index:2;pointer-events:none}
-#mfv-turn-pg.tp-fwd::after{background:linear-gradient(90deg,rgba(0,0,0,.18) 0%,transparent 30%)}
-#mfv-turn-pg.tp-back::after{background:linear-gradient(270deg,rgba(0,0,0,.18) 0%,transparent 30%)}
+/* ── SMOOTH PAGE TURN — Arabic RTL: forward folds LEFT→RIGHT, back folds RIGHT→LEFT ── */
+#mfv-turn-pg{position:absolute;top:0;bottom:0;z-index:30;pointer-events:none;display:none;will-change:transform,opacity,border-radius;transform-style:preserve-3d}
 
-/* Page turn animations — clear visible slide + 3D fold */
+/* Forward (next): LEFT half peels away rightward — pivot on RIGHT edge */
+#mfv-turn-pg.tp-fwd{left:0;right:50%;background:linear-gradient(270deg,#ede3c0,#fdf9ee)}
+/* Backward (prev): RIGHT half peels away leftward — pivot on LEFT edge */
+#mfv-turn-pg.tp-back{right:0;left:50%;background:linear-gradient(90deg,#ede3c0,#fdf9ee)}
+
+#mfv-turn-pg canvas{display:block;width:100%!important;height:100%!important;object-fit:fill;position:absolute;inset:0}
+
+/* Shadow: cast toward spine as page lifts */
+#mfv-turn-pg.tp-fwd::after{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(270deg,rgba(0,0,0,.22) 0%,transparent 40%)}
+#mfv-turn-pg.tp-back::after{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(90deg,rgba(0,0,0,.22) 0%,transparent 40%)}
+
+/* Curl highlight — bright strip at the lifted free edge to simulate bend */
+#mfv-turn-pg.tp-fwd::before{content:'';position:absolute;left:0;top:0;bottom:0;width:18px;z-index:3;pointer-events:none;background:linear-gradient(90deg,rgba(255,255,255,.55),transparent)}
+#mfv-turn-pg.tp-back::before{content:'';position:absolute;right:0;top:0;bottom:0;width:18px;z-index:3;pointer-events:none;background:linear-gradient(270deg,rgba(255,255,255,.55),transparent)}
+
+/*
+  Arabic RTL forward (next) = LEFT page lifts, rotates positive Y (unfolds rightward), pivot = right edge
+  Arabic RTL backward (prev) = RIGHT page lifts, rotates negative Y (unfolds leftward), pivot = left edge
+
+  Bend simulation: border-radius at the free edge peaks mid-animation, simulating the page curling
+*/
 @keyframes mfv-turn-fwd{
-  0%  {opacity:1;transform:perspective(1400px) rotateY(0deg);box-shadow:none}
-  40% {opacity:1;transform:perspective(1400px) rotateY(-55deg);box-shadow:-18px 0 50px rgba(0,0,0,.5)}
-  100%{opacity:0;transform:perspective(1400px) rotateY(-110deg) scale(.97);box-shadow:none}
+  0%  {opacity:1;transform:perspective(1600px) rotateY(0deg);border-radius:0 0 0 0;box-shadow:none}
+  25% {opacity:1;transform:perspective(1600px) rotateY(38deg);border-radius:0 12px 12px 0;box-shadow:8px 0 40px rgba(0,0,0,.45),2px 0 12px rgba(0,0,0,.3)}
+  60% {opacity:1;transform:perspective(1600px) rotateY(72deg);border-radius:0 20px 20px 0;box-shadow:4px 0 20px rgba(0,0,0,.3)}
+  100%{opacity:0;transform:perspective(1600px) rotateY(108deg) scale(.96);border-radius:0;box-shadow:none}
 }
 @keyframes mfv-turn-back{
-  0%  {opacity:0;transform:perspective(1400px) rotateY(-110deg) scale(.97);box-shadow:none}
-  40% {opacity:1;transform:perspective(1400px) rotateY(-55deg);box-shadow:-18px 0 50px rgba(0,0,0,.5)}
-  100%{opacity:1;transform:perspective(1400px) rotateY(0deg);box-shadow:none}
+  0%  {opacity:0;transform:perspective(1600px) rotateY(-108deg) scale(.96);border-radius:0;box-shadow:none}
+  40% {opacity:1;transform:perspective(1600px) rotateY(-72deg);border-radius:20px 0 0 20px;box-shadow:-4px 0 20px rgba(0,0,0,.3)}
+  75% {opacity:1;transform:perspective(1600px) rotateY(-38deg);border-radius:12px 0 0 12px;box-shadow:-8px 0 40px rgba(0,0,0,.45)}
+  100%{opacity:1;transform:perspective(1600px) rotateY(0deg);border-radius:0;box-shadow:none}
 }
 
-/* Page flash — bright ripple so user KNOWS a page turned */
-@keyframes mfv-flash{0%{opacity:0}15%{opacity:.18}100%{opacity:0}}
+/* Page flash — subtle pulse so user registers the turn */
+@keyframes mfv-flash{0%{opacity:0}12%{opacity:.12}100%{opacity:0}}
 #mfv-page-flash{position:absolute;inset:0;z-index:35;background:#fff;pointer-events:none;opacity:0}
-#mfv-page-flash.flash{animation:mfv-flash .55s ease-out forwards}
+#mfv-page-flash.flash{animation:mfv-flash .5s ease-out forwards}
 
-#mfv-turn-pg.anim-fwd {display:block;animation:mfv-turn-fwd .72s cubic-bezier(.4,0,.2,1) forwards;transform-origin:left center}
-#mfv-turn-pg.anim-back{display:block;animation:mfv-turn-back .72s cubic-bezier(.4,0,.2,1) forwards;transform-origin:right center}
+/* Forward: pivot RIGHT edge of the left-half panel */
+#mfv-turn-pg.anim-fwd {display:block;animation:mfv-turn-fwd .75s cubic-bezier(.4,0,.2,1) forwards;transform-origin:right center}
+/* Backward: pivot LEFT edge of the right-half panel */
+#mfv-turn-pg.anim-back{display:block;animation:mfv-turn-back .75s cubic-bezier(.4,0,.2,1) forwards;transform-origin:left center}
 
 /* PDF load progress */
 #mfv-load-screen{position:absolute;inset:0;z-index:60;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0e0a03;gap:20px;padding:30px;text-align:center}
@@ -4450,7 +4468,8 @@ const MushafFlipbook = {
 
     const tp  = document.getElementById('mfv-turn-pg');
     const tc  = document.getElementById('mfv-canvas-turn');
-    const src = document.getElementById(dir === 'fwd' ? 'mfv-canvas-right' : 'mfv-canvas-left');
+    /* RTL: forward = LEFT page peels rightward; backward = RIGHT page peels leftward */
+    const src = document.getElementById(dir === 'fwd' ? 'mfv-canvas-left' : 'mfv-canvas-right');
 
     /* Copy current visible page onto turn canvas */
     if (src && src.width > 0) {
